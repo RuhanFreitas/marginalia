@@ -1,0 +1,53 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  email       String       @unique
+  name        String
+  password    String
+  comments    Comment[]
+  marginalias Marginalia[]
+  role        Role         @default(USER)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Marginalia {
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int
+  book      String
+  author    String
+  contentEn String
+  contentPt String
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Comment {
+  id           Int        @id @default(autoincrement())
+  content      String
+  replies      Comment[]  @relation("CommentToComment")
+  parent       Comment?   @relation("CommentToComment", fields: [parentId], references: [id])
+  parentId     Int?
+  user         User       @relation(fields: [userId], references: [id])
+  userId       Int
+  marginalia   Marginalia @relation(fields: [marginaliaId], references: [id])
+  marginaliaId Int
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt()
+}
+
+enum Role {
+  USER
+  ADMIN
+}
