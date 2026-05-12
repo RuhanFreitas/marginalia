@@ -8,6 +8,8 @@ import { CreateMarginaliaDTO } from './dto/create-marginalia.dto'
 import { Marginalia } from '../generated/prisma/client'
 import { UpdateMarginaliaDTO } from './dto/update-marginalia.dto'
 
+// have to create a tree with the comments
+
 @Injectable()
 export class MarginaliaRepository {
     constructor(private readonly prisma: PrismaService) {}
@@ -29,6 +31,9 @@ export class MarginaliaRepository {
                         },
                     },
                 },
+                include: {
+                    comments: true,
+                },
             })
         } catch (error) {
             throw new InternalServerErrorException('Marginalia not created')
@@ -38,11 +43,17 @@ export class MarginaliaRepository {
     async findAll(): Promise<Marginalia[]> {
         return await this.prisma.marginalia.findMany({
             orderBy: { id: 'desc' },
+            include: {
+                comments: true,
+            },
         })
     }
 
     async findById(id: number): Promise<Marginalia | null> {
-        return await this.prisma.marginalia.findUnique({ where: { id } })
+        return await this.prisma.marginalia.findUnique({
+            where: { id },
+            include: { comments: true },
+        })
     }
 
     async updateById(
@@ -58,6 +69,9 @@ export class MarginaliaRepository {
                     contentPt: updateMarginaliaDTO.contentPt,
                 },
                 where: { id },
+                include: {
+                    comments: true,
+                },
             })
         } catch (error) {
             throw new NotFoundException(
