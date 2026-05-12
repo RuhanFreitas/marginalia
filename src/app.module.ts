@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { UserModule } from './user/user.module'
 import { PrismaModule } from './prisma/prisma.module'
+import { MarginaliaModule } from './marginalia/marginalia.module'
 
 @Module({
     imports: [
@@ -10,6 +11,7 @@ import { PrismaModule } from './prisma/prisma.module'
         }),
         PrismaModule,
         UserModule,
+        MarginaliaModule,
     ],
     controllers: [],
     providers: [],

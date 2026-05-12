@@ -37,11 +37,11 @@ model Comment {
   id           Int        @id @default(autoincrement())
   content      String
   replies      Comment[]  @relation("CommentToComment")
-  parent       Comment?   @relation("CommentToComment", fields: [parentId], references: [id])
+  parent       Comment?   @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
   parentId     Int?
-  user         User       @relation(fields: [userId], references: [id])
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       Int
-  marginalia   Marginalia @relation(fields: [marginaliaId], references: [id])
+  marginalia   Marginalia @relation(fields: [marginaliaId], references: [id], onDelete: Cascade)
   marginaliaId Int
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt()
