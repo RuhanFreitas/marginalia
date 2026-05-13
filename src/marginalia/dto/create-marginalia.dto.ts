@@ -4,6 +4,9 @@ export class CreateMarginaliaDTO {
     @IsString({ message: 'Please, enter a valid book title' })
     book: string
 
+    @IsString({ message: 'Please, enter a valid cover format' })
+    cover: string
+
     @IsString({ message: 'Please, enter a valid author name' })
     author: string
 

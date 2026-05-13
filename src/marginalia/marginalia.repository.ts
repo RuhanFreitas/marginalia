@@ -22,6 +22,7 @@ export class MarginaliaRepository {
         try {
             return await this.prisma.marginalia.create({
                 data: {
+                    cover: createMarginaliaDTO.cover,
                     author: createMarginaliaDTO.author,
                     book: createMarginaliaDTO.book,
                     contentEn: createMarginaliaDTO.contentEn,
@@ -74,6 +75,7 @@ export class MarginaliaRepository {
         try {
             return await this.prisma.marginalia.update({
                 data: {
+                    cover: updateMarginaliaDTO.cover,
                     author: updateMarginaliaDTO.author,
                     book: updateMarginaliaDTO.book,
                     contentEn: updateMarginaliaDTO.contentEn,

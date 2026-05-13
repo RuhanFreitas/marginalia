@@ -24,6 +24,7 @@ model Marginalia {
   id        Int       @id @default(autoincrement())
   user      User      @relation(fields: [userId], references: [id])
   userId    Int
+  cover     String
   book      String
   author    String
   contentEn String

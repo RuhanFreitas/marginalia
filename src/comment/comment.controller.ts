@@ -24,7 +24,7 @@ import { Roles } from '../decorators/roles.decorator'
 export class CommentController {
     constructor(private readonly commentService: CommentService) {}
 
-    @Post(':id')
+    @Post()
     async create(
         @Body() createCommentDTO: CreateCommentDTO,
         @Req() req: JwtRequest,
