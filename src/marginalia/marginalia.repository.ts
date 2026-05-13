@@ -1,14 +1,16 @@
 import {
+    BadRequestException,
     Injectable,
-    InternalServerErrorException,
     NotFoundException,
 } from '@nestjs/common'
+
+import { Marginalia, Prisma } from '../generated/prisma/client'
+
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateMarginaliaDTO } from './dto/create-marginalia.dto'
-import { Marginalia } from '../generated/prisma/client'
 import { UpdateMarginaliaDTO } from './dto/update-marginalia.dto'
 
-// have to create a tree with the comments
+// have to create a tree json later
 
 @Injectable()
 export class MarginaliaRepository {
@@ -27,7 +29,7 @@ export class MarginaliaRepository {
                     contentPt: createMarginaliaDTO.contentPt,
                     user: {
                         connect: {
-                            id: id,
+                            id,
                         },
                     },
                 },
@@ -36,7 +38,16 @@ export class MarginaliaRepository {
                 },
             })
         } catch (error) {
-            throw new InternalServerErrorException('Marginalia not created')
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                // Foreign key error
+                if (error.code === 'P2003') {
+                    throw new BadRequestException('Invalid user id')
+                }
+
+                throw new BadRequestException('Failed to create marginalia')
+            }
+
+            throw error
         }
     }
 
@@ -52,7 +63,9 @@ export class MarginaliaRepository {
     async findById(id: number): Promise<Marginalia | null> {
         return await this.prisma.marginalia.findUnique({
             where: { id },
-            include: { comments: true },
+            include: {
+                comments: true,
+            },
         })
     }
 
@@ -74,19 +87,35 @@ export class MarginaliaRepository {
                 },
             })
         } catch (error) {
-            throw new NotFoundException(
-                'It was not possible to update marginalia',
-            )
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                // Record not found
+                if (error.code === 'P2025') {
+                    throw new NotFoundException('Marginalia not found')
+                }
+
+                throw new BadRequestException('Failed to update marginalia')
+            }
+
+            throw error
         }
     }
 
-    async delete(id: number) {
+    async delete(id: number): Promise<Marginalia> {
         try {
             return await this.prisma.marginalia.delete({
                 where: { id },
             })
         } catch (error) {
-            throw new NotFoundException('The entity could not be deleted')
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                // Record not found
+                if (error.code === 'P2025') {
+                    throw new NotFoundException('Marginalia not found')
+                }
+
+                throw new BadRequestException('Failed to delete marginalia')
+            }
+
+            throw error
         }
     }
 }

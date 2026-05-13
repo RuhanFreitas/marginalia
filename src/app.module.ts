@@ -4,6 +4,7 @@ import { UserModule } from './user/user.module'
 import { PrismaModule } from './prisma/prisma.module'
 import { MarginaliaModule } from './marginalia/marginalia.module'
 import { CommentModule } from './comment/comment.module'
+import { AuthModule } from './auth/auth.module'
 
 @Module({
     imports: [
@@ -14,6 +15,7 @@ import { CommentModule } from './comment/comment.module'
         UserModule,
         MarginaliaModule,
         CommentModule,
+        AuthModule,
     ],
     controllers: [],
     providers: [],

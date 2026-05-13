@@ -1,12 +1,14 @@
 import {
+    BadRequestException,
     Injectable,
-    InternalServerErrorException,
     NotFoundException,
 } from '@nestjs/common'
+
+import { Comment, Prisma } from '../generated/prisma/client'
+
 import { CreateCommentDTO } from './dto/create-comment.dto'
 import { PrismaService } from '../prisma/prisma.service'
 import { UpdateCommentDTO } from './dto/update-comment.dto'
-import { Comment } from '../generated/prisma/client'
 
 @Injectable()
 export class CommentRepository {
@@ -20,25 +22,46 @@ export class CommentRepository {
             return await this.prisma.comment.create({
                 data: {
                     content: createCommentDTO.content,
+
                     marginalia: {
                         connect: {
                             id: createCommentDTO.marginaliaId,
                         },
                     },
+
                     user: {
                         connect: {
-                            id: id,
+                            id,
                         },
                     },
+
                     ...(createCommentDTO.parentId && {
                         parent: {
-                            connect: { id: createCommentDTO.parentId },
+                            connect: {
+                                id: createCommentDTO.parentId,
+                            },
                         },
                     }),
                 },
             })
         } catch (error) {
-            throw new InternalServerErrorException('Comment not created')
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                // Foreign key constraint
+                if (error.code === 'P2003') {
+                    throw new BadRequestException(
+                        'Invalid marginalia id, user id, or parent comment id',
+                    )
+                }
+
+                // Record not found during connect
+                if (error.code === 'P2025') {
+                    throw new NotFoundException('Related record not found')
+                }
+
+                throw new BadRequestException('Failed to create comment')
+            }
+
+            throw error
         }
     }
 
@@ -54,17 +77,35 @@ export class CommentRepository {
                 where: { id },
             })
         } catch (error) {
-            throw new NotFoundException('It was not possible to update comment')
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                // Record not found
+                if (error.code === 'P2025') {
+                    throw new NotFoundException('Comment not found')
+                }
+
+                throw new BadRequestException('Failed to update comment')
+            }
+
+            throw error
         }
     }
 
     async delete(id: number): Promise<Comment> {
         try {
-            return await this.prisma.comment.delete({ where: { id } })
+            return await this.prisma.comment.delete({
+                where: { id },
+            })
         } catch (error) {
-            throw new NotFoundException(
-                'The comment could not be deleted. It has possibly already been deleted',
-            )
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                // Record not found
+                if (error.code === 'P2025') {
+                    throw new NotFoundException('Comment not found')
+                }
+
+                throw new BadRequestException('Failed to delete comment')
+            }
+
+            throw error
         }
     }
 }
