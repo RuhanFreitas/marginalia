@@ -66,13 +66,14 @@ export class CommentRepository {
     async updateById(
         updateCommentDTO: UpdateCommentDTO,
         id: number,
+        userId: number,
     ): Promise<Comment> {
         try {
             return await this.prisma.comment.update({
                 data: {
                     content: updateCommentDTO.content,
                 },
-                where: { id: id },
+                where: { id, userId },
             })
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -87,10 +88,10 @@ export class CommentRepository {
         }
     }
 
-    async delete(id: number): Promise<Comment> {
+    async delete(id: number, userId: number): Promise<Comment> {
         try {
             return await this.prisma.comment.delete({
-                where: { id },
+                where: { id, userId },
             })
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {

@@ -36,12 +36,20 @@ export class CommentController {
     async updateById(
         @Param('id', ParseIntPipe) id: number,
         @Body() updateComment: UpdateCommentDTO,
+        @Req() req: JwtRequest,
     ) {
-        return await this.commentService.updateById(updateComment, id)
+        return await this.commentService.updateById(
+            updateComment,
+            id,
+            req.user.sub,
+        )
     }
 
     @Delete(':id')
-    async delete(@Param('id', ParseIntPipe) id: number) {
-        return await this.commentService.delete(id)
+    async delete(
+        @Param('id', ParseIntPipe) id: number,
+        @Req() req: JwtRequest,
+    ) {
+        return await this.commentService.delete(id, req.user.sub)
     }
 }

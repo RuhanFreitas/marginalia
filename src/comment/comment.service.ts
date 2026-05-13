@@ -11,11 +11,19 @@ export class CommentService {
         return await this.commentRepository.create(createCommentDTO, id)
     }
 
-    async updateById(updateCommentDTO: UpdateCommentDTO, id: number) {
-        return await this.commentRepository.updateById(updateCommentDTO, id)
+    async updateById(
+        updateCommentDTO: UpdateCommentDTO,
+        id: number,
+        userId: number,
+    ) {
+        return await this.commentRepository.updateById(
+            updateCommentDTO,
+            id,
+            userId,
+        )
     }
 
-    async delete(id: number) {
-        return await this.commentRepository.delete(id)
+    async delete(id: number, userId: number) {
+        return await this.commentRepository.delete(id, userId)
     }
 }
