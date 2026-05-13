@@ -1,41 +1,27 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    ParseIntPipe,
-    Patch,
-    Post,
-} from '@nestjs/common'
-import { CreateUserDTO } from './dto/create-user.dto'
+import { Body, Controller, Delete, Get, Patch, Req } from '@nestjs/common'
 import { UserService } from './user.service'
 import { UpdateUserDTO } from './dto/update-user.dto'
+import type { JwtRequest } from '../types/jwt-request'
 
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
-    @Post()
-    async create(@Body() createUserDTO: CreateUserDTO) {
-        return await this.userService.create(createUserDTO)
+    @Get()
+    async findMyself(@Req() req: JwtRequest) {
+        return await this.userService.findMyself(req.user.sub)
     }
 
-    @Get(':id')
-    async findById(@Param('id', ParseIntPipe) id: number) {
-        return await this.userService.findById(id)
-    }
-
-    @Patch(':id')
-    async updateById(
-        @Param('id', ParseIntPipe) id: number,
+    @Patch()
+    async updateMyself(
         @Body() updateUserDTO: UpdateUserDTO,
+        @Req() req: JwtRequest,
     ) {
-        return await this.userService.updateById(id, updateUserDTO)
+        return await this.userService.updateMyself(req.user.sub, updateUserDTO)
     }
 
-    @Delete(':id')
-    async delete(@Param('id', ParseIntPipe) id: number) {
-        return await this.userService.delete(id)
+    @Delete()
+    async delete(@Req() req: JwtRequest) {
+        return await this.userService.delete(req.user.sub)
     }
 }

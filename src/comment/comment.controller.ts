@@ -6,22 +6,23 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Req,
 } from '@nestjs/common'
 import { CommentService } from './comment.service'
 import { CreateCommentDTO } from './dto/create-comment.dto'
 import { UpdateCommentDTO } from './dto/update-comment.dto'
+import type { JwtRequest } from '../types/jwt-request'
 
 @Controller('comment')
 export class CommentController {
     constructor(private readonly commentService: CommentService) {}
 
-    // remove the 'id' param and change it for the req.user
     @Post(':id')
     async create(
-        @Param('id', ParseIntPipe) id: number,
         @Body() createCommentDTO: CreateCommentDTO,
+        @Req() req: JwtRequest,
     ) {
-        return await this.commentService.create(createCommentDTO, id)
+        return await this.commentService.create(createCommentDTO, req.user.sub)
     }
 
     @Patch(':id')

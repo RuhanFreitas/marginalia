@@ -7,22 +7,27 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Req,
 } from '@nestjs/common'
 import { CreateMarginaliaDTO } from './dto/create-marginalia.dto'
 import { MarginaliaService } from './marginalia.service'
 import { UpdateMarginaliaDTO } from './dto/update-marginalia.dto'
+import type { JwtRequest } from '../types/jwt-request'
 
 @Controller('marginalia')
 export class MarginaliaController {
     constructor(private readonly marginaliaService: MarginaliaService) {}
 
     // change the way of getting the id, instead of param we're getting the id through the req
-    @Post(':id')
+    @Post()
     async create(
-        @Param('id', ParseIntPipe) id: number,
         @Body() createMarginaliaDTO: CreateMarginaliaDTO,
+        @Req() req: JwtRequest,
     ) {
-        return await this.marginaliaService.create(createMarginaliaDTO, id)
+        return await this.marginaliaService.create(
+            createMarginaliaDTO,
+            req.user.sub,
+        )
     }
 
     @Get('/all')

@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt'
 import { LoginDTO } from './dto/login.dto'
 import { HashService } from '../hash/hash.service'
 import { RegisterDTO } from './dto/register.dto'
+import { ResponseUserDTO } from '../user/dto/response/response-user.dto'
 
 @Injectable()
 export class AuthService {
@@ -31,7 +32,9 @@ export class AuthService {
 
         const payload = { sub: user.id, role: user.role }
 
-        return { token: this.JwtService.sign(payload), user }
+        const userRes = new ResponseUserDTO(user)
+
+        return { token: this.JwtService.sign(payload), user: userRes }
     }
 
     async register(registerDTO: RegisterDTO) {
@@ -46,6 +49,8 @@ export class AuthService {
 
         const payload = { sub: user.id, role: user.role }
 
-        return { token: this.JwtService.sign(payload), user }
+        const userRes = new ResponseUserDTO(user)
+
+        return { token: this.JwtService.sign(payload), user: userRes }
     }
 }
