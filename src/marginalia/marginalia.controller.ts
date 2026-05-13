@@ -8,17 +8,23 @@ import {
     Patch,
     Post,
     Req,
+    UseGuards,
 } from '@nestjs/common'
 import { CreateMarginaliaDTO } from './dto/create-marginalia.dto'
 import { MarginaliaService } from './marginalia.service'
 import { UpdateMarginaliaDTO } from './dto/update-marginalia.dto'
 import type { JwtRequest } from '../types/jwt-request'
+import { AuthGuard } from '@nestjs/passport'
+import { RolesGuard } from '../guards/roles.guard'
+import { Roles } from '../decorators/roles.decorator'
+import { Role } from '../generated/prisma/enums'
 
 @Controller('marginalia')
 export class MarginaliaController {
     constructor(private readonly marginaliaService: MarginaliaService) {}
 
-    // change the way of getting the id, instead of param we're getting the id through the req
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.ADMIN)
     @Post()
     async create(
         @Body() createMarginaliaDTO: CreateMarginaliaDTO,
@@ -40,6 +46,8 @@ export class MarginaliaController {
         return await this.marginaliaService.findById(id)
     }
 
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.ADMIN)
     @Patch(':id')
     async updateById(
         @Param('id', ParseIntPipe) id: number,
@@ -48,6 +56,8 @@ export class MarginaliaController {
         return await this.marginaliaService.updateById(updateMarginaliaDTO, id)
     }
 
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.ADMIN)
     @Delete(':id')
     async delete(@Param('id', ParseIntPipe) id: number) {
         return await this.marginaliaService.delete(id)

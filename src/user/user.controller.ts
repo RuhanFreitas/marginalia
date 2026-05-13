@@ -1,8 +1,22 @@
-import { Body, Controller, Delete, Get, Patch, Req } from '@nestjs/common'
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Patch,
+    Req,
+    UseGuards,
+} from '@nestjs/common'
 import { UserService } from './user.service'
 import { UpdateUserDTO } from './dto/update-user.dto'
 import type { JwtRequest } from '../types/jwt-request'
+import { AuthGuard } from '@nestjs/passport'
+import { RolesGuard } from '../guards/roles.guard'
+import { Roles } from '../decorators/roles.decorator'
+import { Role } from '../generated/prisma/enums'
 
+@UseGuards(AuthGuard('jwt'), RolesGuard)
+@Roles(Role.ADMIN, Role.USER)
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) {}

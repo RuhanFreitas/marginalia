@@ -46,14 +46,12 @@ export class CommentRepository {
             })
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                // Foreign key constraint
                 if (error.code === 'P2003') {
                     throw new BadRequestException(
                         'Invalid marginalia id, user id, or parent comment id',
                     )
                 }
 
-                // Record not found during connect
                 if (error.code === 'P2025') {
                     throw new NotFoundException('Related record not found')
                 }
@@ -74,11 +72,10 @@ export class CommentRepository {
                 data: {
                     content: updateCommentDTO.content,
                 },
-                where: { id },
+                where: { id: id },
             })
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                // Record not found
                 if (error.code === 'P2025') {
                     throw new NotFoundException('Comment not found')
                 }
@@ -97,7 +94,6 @@ export class CommentRepository {
             })
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                // Record not found
                 if (error.code === 'P2025') {
                     throw new NotFoundException('Comment not found')
                 }

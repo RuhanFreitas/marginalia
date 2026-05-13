@@ -1,11 +1,12 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { PassportStrategy } from '@nestjs/passport'
 import { ExtractJwt, Strategy } from 'passport-jwt'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor() {
-        const SECRET = process.env.JWT_SECRET
+    constructor(private readonly configService: ConfigService) {
+        const SECRET = configService.get<string>('JWT_SECRET')
 
         if (!SECRET) {
             throw new InternalServerErrorException(
@@ -21,6 +22,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(payload: any): Promise<unknown> {
-        return { userId: payload.sub }
+        return { sub: payload.sub, role: payload.role }
     }
 }

@@ -9,8 +9,7 @@ import { Marginalia, Prisma } from '../generated/prisma/client'
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateMarginaliaDTO } from './dto/create-marginalia.dto'
 import { UpdateMarginaliaDTO } from './dto/update-marginalia.dto'
-
-// have to create a tree json later
+import { MarginaliaWithComments } from '../types/marginalia'
 
 @Injectable()
 export class MarginaliaRepository {
@@ -39,7 +38,6 @@ export class MarginaliaRepository {
             })
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                // Foreign key error
                 if (error.code === 'P2003') {
                     throw new BadRequestException('Invalid user id')
                 }
@@ -60,7 +58,7 @@ export class MarginaliaRepository {
         })
     }
 
-    async findById(id: number): Promise<Marginalia | null> {
+    async findById(id: number): Promise<MarginaliaWithComments | null> {
         return await this.prisma.marginalia.findUnique({
             where: { id },
             include: {
@@ -88,7 +86,6 @@ export class MarginaliaRepository {
             })
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                // Record not found
                 if (error.code === 'P2025') {
                     throw new NotFoundException('Marginalia not found')
                 }
