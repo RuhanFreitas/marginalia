@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import {
+    HttpCode,
+    HttpStatus,
+    Injectable,
+    UnauthorizedException,
+} from '@nestjs/common'
 import { UserRepository } from '../user/user.repository'
 import { JwtService } from '@nestjs/jwt'
 import { LoginDTO } from './dto/login.dto'
@@ -14,6 +19,7 @@ export class AuthService {
         private readonly hashService: HashService,
     ) {}
 
+    @HttpCode(HttpStatus.OK)
     async login(loginDTO: LoginDTO) {
         const user = await this.userRepository.findByEmail(loginDTO.email)
 
@@ -37,6 +43,7 @@ export class AuthService {
         return { token: this.JwtService.sign(payload), user: userRes }
     }
 
+    @HttpCode(HttpStatus.CREATED)
     async register(registerDTO: RegisterDTO) {
         const hash = await this.hashService.hash(registerDTO.password)
 
