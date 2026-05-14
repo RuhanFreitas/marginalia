@@ -2,6 +2,8 @@ import {
     Body,
     Controller,
     Delete,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseIntPipe,
     Patch,
@@ -24,6 +26,7 @@ import { Roles } from '../decorators/roles.decorator'
 export class CommentController {
     constructor(private readonly commentService: CommentService) {}
 
+    @HttpCode(HttpStatus.OK)
     @Post()
     async create(
         @Body() createCommentDTO: CreateCommentDTO,
@@ -32,6 +35,7 @@ export class CommentController {
         return await this.commentService.create(createCommentDTO, req.user.sub)
     }
 
+    @HttpCode(HttpStatus.OK)
     @Patch(':id')
     async updateById(
         @Param('id', ParseIntPipe) id: number,
@@ -45,6 +49,7 @@ export class CommentController {
         )
     }
 
+    @HttpCode(HttpStatus.OK)
     @Delete(':id')
     async delete(
         @Param('id', ParseIntPipe) id: number,

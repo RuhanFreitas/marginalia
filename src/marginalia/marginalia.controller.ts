@@ -3,6 +3,8 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseIntPipe,
     Patch,
@@ -25,6 +27,7 @@ export class MarginaliaController {
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles(Role.ADMIN)
+    @HttpCode(HttpStatus.OK)
     @Post()
     async create(
         @Body() createMarginaliaDTO: CreateMarginaliaDTO,
@@ -36,11 +39,13 @@ export class MarginaliaController {
         )
     }
 
+    @HttpCode(HttpStatus.OK)
     @Get('/all')
     async findAll() {
         return await this.marginaliaService.findAll()
     }
 
+    @HttpCode(HttpStatus.OK)
     @Get(':id')
     async findById(@Param('id', ParseIntPipe) id: number) {
         return await this.marginaliaService.findById(id)
@@ -48,6 +53,7 @@ export class MarginaliaController {
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles(Role.ADMIN)
+    @HttpCode(HttpStatus.OK)
     @Patch(':id')
     async updateById(
         @Param('id', ParseIntPipe) id: number,
@@ -58,6 +64,7 @@ export class MarginaliaController {
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles(Role.ADMIN)
+    @HttpCode(HttpStatus.OK)
     @Delete(':id')
     async delete(@Param('id', ParseIntPipe) id: number) {
         return await this.marginaliaService.delete(id)

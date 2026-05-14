@@ -3,6 +3,8 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     Patch,
     Req,
     UseGuards,
@@ -21,11 +23,17 @@ import { Role } from '../generated/prisma/enums'
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.ADMIN, Role.USER)
+    @HttpCode(HttpStatus.OK)
     @Get()
     async findMyself(@Req() req: JwtRequest) {
         return await this.userService.findMyself(req.user.sub)
     }
 
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.ADMIN, Role.USER)
+    @HttpCode(HttpStatus.OK)
     @Patch()
     async updateMyself(
         @Body() updateUserDTO: UpdateUserDTO,
@@ -34,6 +42,9 @@ export class UserController {
         return await this.userService.updateMyself(req.user.sub, updateUserDTO)
     }
 
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.ADMIN, Role.USER)
+    @HttpCode(HttpStatus.OK)
     @Delete()
     async delete(@Req() req: JwtRequest) {
         return await this.userService.delete(req.user.sub)
