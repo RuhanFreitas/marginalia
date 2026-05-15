@@ -88,6 +88,7 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const MarginaliaScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  cover: 'cover',
   book: 'book',
   author: 'author',
   contentEn: 'contentEn',
