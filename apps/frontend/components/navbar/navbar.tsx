@@ -1,27 +1,23 @@
+import Toggle from '../toggle/toggle'
+
 export default function Navbar() {
     return (
-        <nav className="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-                <h1
-                    className="text-2xl tracking-tight text-foreground"
-                    style={{
-                        fontFamily: "'Libre Baskerville', serif",
-                        fontWeight: 700,
-                    }}
-                >
-                    Marginalia
-                </h1>
-                <p
-                    className="text-xs text-muted-foreground tracking-widest uppercase hidden sm:inline text-zinc-700"
-                    style={{
-                        fontFamily: "'Inter', sans-serif",
-                        letterSpacing: '0.14em',
-                    }}
-                >
-                    A READER'S NOTES
-                </p>
+        <nav className="border-b border-foreground/20">
+            <div className="mx-auto max-w-5xl py-6 flex justify-between items-center px-8">
+                <div className="flex gap-4 items-center">
+                    <span className="font-display text-2xl font-semibold tracking-wide text-default">
+                        Marginalia
+                    </span>
+                    <span className="text-default/60 hidden text-xs font-semibold tracking-widest sm:inline">
+                        A READER'S NOTES
+                    </span>
+                </div>
+                <div className="flex gap-4">
+                    <button className="text-default text-sm">login</button>
+                    <button className="text-default text-sm">sign up</button>
+                    <Toggle />
+                </div>
             </div>
-            <div>{/* auth buttons / user */}</div>
         </nav>
     )
 }
