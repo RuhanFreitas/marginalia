@@ -2,8 +2,8 @@ import Toggle from '../toggle/toggle'
 
 export default function Navbar() {
     return (
-        <nav className="top-0 border-b border-foreground/10">
-            <div className="mx-auto max-w-5xl py-6 flex justify-between items-center px-8">
+        <nav className="sticky top-0 z-100 bg-background border-b border-foreground/10">
+            <div className="mx-auto max-w-5xl py-6 flex justify-between items-center px-8 sm:px-0">
                 <div className="flex gap-4 items-center">
                     <span className="font-display text-2xl font-semibold tracking-wide text-default">
                         Marginalia
