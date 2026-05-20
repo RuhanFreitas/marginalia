@@ -47,12 +47,6 @@ export class MarginaliaController {
     }
 
     @HttpCode(HttpStatus.OK)
-    @Get()
-    async find(@Query('title') title: string) {
-        return await this.marginaliaService.find(title)
-    }
-
-    @HttpCode(HttpStatus.OK)
     @Get(':id')
     async findById(@Param('id', ParseIntPipe) id: number) {
         return await this.marginaliaService.findById(id)

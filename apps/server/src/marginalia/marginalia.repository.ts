@@ -52,10 +52,6 @@ export class MarginaliaRepository {
         }
     }
 
-    async find(title: string) {
-        return await this.prisma.marginalia.findFirst({ where: { title } })
-    }
-
     async findAll(): Promise<Marginalia[]> {
         return await this.prisma.marginalia.findMany({
             orderBy: { id: 'desc' },
