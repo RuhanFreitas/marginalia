@@ -7,6 +7,11 @@ import { RegisterDTO } from './dto/register.dto'
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
+    @Post('admin')
+    async createAdmin() {
+        return await this.authService.createAdmin()
+    }
+
     @HttpCode(HttpStatus.OK)
     @Post('login')
     async login(@Body() loginDTO: LoginDTO) {

@@ -2,6 +2,7 @@ import { Inter, Libre_Baskerville } from 'next/font/google'
 import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/navbar/navbar'
+import Footer from '@/components/footer/footer'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -28,9 +29,10 @@ export default function RootLayout({
             lang="en"
             className={`${inter.className} ${inter.variable} ${baskerville.variable} light`}
         >
-            <body className="bg-background">
+            <body className="bg-background h-full">
                 <Navbar />
                 {children}
+                <Footer />
             </body>
         </html>
     )

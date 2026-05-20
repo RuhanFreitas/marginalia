@@ -1,9 +1,10 @@
+import Comment from '@/components/comment/comment'
 import { ArrowLeftIcon } from 'lucide-react'
 import Image from 'next/image'
 
 export default function Page() {
     return (
-        <div className="max-w-5xl mx-auto h-screen overflow-hidden">
+        <div className="max-w-5xl mx-auto h-full overflow-hidden">
             <div className="py-12">
                 <button className="flex items-center gap-3 text-sm font-medium text-default/60">
                     <ArrowLeftIcon className="text-default/60" width={18} />
@@ -91,6 +92,14 @@ export default function Page() {
                         not comfort me. It just made the absurdity more precise,
                         which is sometimes the same thing.
                     </p>
+                    <div className="flex flex-col py-8 border-t border-default/10 gap-4">
+                        <h2 className="font-display tracking-wider">
+                            Comments (1)
+                        </h2>
+                        <div>
+                            <Comment />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

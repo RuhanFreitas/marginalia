@@ -4,6 +4,9 @@ export class CreateMarginaliaDTO {
     @IsString({ message: 'Please, enter a valid book title' })
     book: string
 
+    @IsString({ message: 'Please, enter a valid title' })
+    title: string
+
     @IsString({ message: 'Please, enter a valid cover format' })
     cover: string
 
@@ -12,7 +15,4 @@ export class CreateMarginaliaDTO {
 
     @IsString({ message: 'Please, enter a valid content format in english' })
     contentEn: string
-
-    @IsString({ message: 'Please, enter a valid content format in portuguese' })
-    contentPt: string
 }

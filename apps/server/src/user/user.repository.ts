@@ -15,6 +15,17 @@ import { UpdateUserDTO } from './dto/update-user.dto'
 export class UserRepository {
     constructor(private readonly prisma: PrismaService) {}
 
+    async createAdmin() {
+        return await this.prisma.user.create({
+            data: {
+                role: 'ADMIN',
+                name: 'Ruhan Freitas',
+                email: 'maskmfgjsakj@gmail.com',
+                password: '123456789',
+            },
+        })
+    }
+
     async create(createUserDTO: CreateUserDTO): Promise<User> {
         try {
             return await this.prisma.user.create({

@@ -24,11 +24,12 @@ model Marginalia {
   id        Int       @id @default(autoincrement())
   user      User      @relation(fields: [userId], references: [id])
   userId    Int
+  title     String    @default("")
+  description String  @default("")
   cover     String
   book      String
   author    String
   contentEn String
-  contentPt String
   comments  Comment[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

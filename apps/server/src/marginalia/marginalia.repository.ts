@@ -23,10 +23,10 @@ export class MarginaliaRepository {
             return await this.prisma.marginalia.create({
                 data: {
                     cover: createMarginaliaDTO.cover,
+                    title: createMarginaliaDTO.title,
                     author: createMarginaliaDTO.author,
                     book: createMarginaliaDTO.book,
                     contentEn: createMarginaliaDTO.contentEn,
-                    contentPt: createMarginaliaDTO.contentPt,
                     user: {
                         connect: {
                             id,
@@ -43,6 +43,7 @@ export class MarginaliaRepository {
                     throw new BadRequestException('Invalid user id')
                 }
 
+                console.log(error.message)
                 throw new BadRequestException('Failed to create marginalia')
             }
 
@@ -79,7 +80,6 @@ export class MarginaliaRepository {
                     author: updateMarginaliaDTO.author,
                     book: updateMarginaliaDTO.book,
                     contentEn: updateMarginaliaDTO.contentEn,
-                    contentPt: updateMarginaliaDTO.contentPt,
                 },
                 where: { id },
                 include: {

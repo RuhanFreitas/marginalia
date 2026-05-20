@@ -14,6 +14,8 @@
     "test": "npm run test --workspace server"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.9.1",
     "concurrently": "^9.0.0",
     "typescript": "^6.0.3"
   },
