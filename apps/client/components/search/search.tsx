@@ -1,6 +1,12 @@
+import { getAllMarginalias } from '@/lib/marginalia'
+import { Marginalia } from '@/types/api/marginalia'
 import { SearchIcon } from 'lucide-react'
 
-export default function Search() {
+export default async function Search() {
+    const marginalias: Marginalia[] = await getAllMarginalias()
+
+    const entries = marginalias.length
+
     return (
         <div>
             <div className="flex justify-between items-center mx-auto max-w-5xl py-4 px-8 sm:px-0">
@@ -13,7 +19,9 @@ export default function Search() {
                     />
                 </div>
 
-                <span className="text-xs text-default/60">6 entries</span>
+                <span className="text-xs text-default/60">
+                    {entries} entries
+                </span>
             </div>
         </div>
     )

@@ -9,6 +9,7 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Query,
     Req,
     UseGuards,
 } from '@nestjs/common'
@@ -43,6 +44,12 @@ export class MarginaliaController {
     @Get('/all')
     async findAll() {
         return await this.marginaliaService.findAll()
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Get()
+    async find(@Query('title') title: string) {
+        return await this.marginaliaService.find(title)
     }
 
     @HttpCode(HttpStatus.OK)

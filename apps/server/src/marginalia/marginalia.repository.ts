@@ -24,6 +24,7 @@ export class MarginaliaRepository {
                 data: {
                     cover: createMarginaliaDTO.cover,
                     title: createMarginaliaDTO.title,
+                    description: createMarginaliaDTO.description,
                     author: createMarginaliaDTO.author,
                     book: createMarginaliaDTO.book,
                     contentEn: createMarginaliaDTO.contentEn,
@@ -49,6 +50,10 @@ export class MarginaliaRepository {
 
             throw error
         }
+    }
+
+    async find(title: string) {
+        return await this.prisma.marginalia.findFirst({ where: { title } })
     }
 
     async findAll(): Promise<Marginalia[]> {

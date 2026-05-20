@@ -40,6 +40,7 @@ export type MarginaliaMinAggregateOutputType = {
   id: number | null
   userId: number | null
   title: string | null
+  description: string | null
   cover: string | null
   book: string | null
   author: string | null
@@ -52,6 +53,7 @@ export type MarginaliaMaxAggregateOutputType = {
   id: number | null
   userId: number | null
   title: string | null
+  description: string | null
   cover: string | null
   book: string | null
   author: string | null
@@ -64,6 +66,7 @@ export type MarginaliaCountAggregateOutputType = {
   id: number
   userId: number
   title: number
+  description: number
   cover: number
   book: number
   author: number
@@ -88,6 +91,7 @@ export type MarginaliaMinAggregateInputType = {
   id?: true
   userId?: true
   title?: true
+  description?: true
   cover?: true
   book?: true
   author?: true
@@ -100,6 +104,7 @@ export type MarginaliaMaxAggregateInputType = {
   id?: true
   userId?: true
   title?: true
+  description?: true
   cover?: true
   book?: true
   author?: true
@@ -112,6 +117,7 @@ export type MarginaliaCountAggregateInputType = {
   id?: true
   userId?: true
   title?: true
+  description?: true
   cover?: true
   book?: true
   author?: true
@@ -211,6 +217,7 @@ export type MarginaliaGroupByOutputType = {
   id: number
   userId: number
   title: string
+  description: string
   cover: string
   book: string
   author: string
@@ -246,6 +253,7 @@ export type MarginaliaWhereInput = {
   id?: Prisma.IntFilter<"Marginalia"> | number
   userId?: Prisma.IntFilter<"Marginalia"> | number
   title?: Prisma.StringFilter<"Marginalia"> | string
+  description?: Prisma.StringFilter<"Marginalia"> | string
   cover?: Prisma.StringFilter<"Marginalia"> | string
   book?: Prisma.StringFilter<"Marginalia"> | string
   author?: Prisma.StringFilter<"Marginalia"> | string
@@ -260,6 +268,7 @@ export type MarginaliaOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   cover?: Prisma.SortOrder
   book?: Prisma.SortOrder
   author?: Prisma.SortOrder
@@ -277,6 +286,7 @@ export type MarginaliaWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.MarginaliaWhereInput | Prisma.MarginaliaWhereInput[]
   userId?: Prisma.IntFilter<"Marginalia"> | number
   title?: Prisma.StringFilter<"Marginalia"> | string
+  description?: Prisma.StringFilter<"Marginalia"> | string
   cover?: Prisma.StringFilter<"Marginalia"> | string
   book?: Prisma.StringFilter<"Marginalia"> | string
   author?: Prisma.StringFilter<"Marginalia"> | string
@@ -291,6 +301,7 @@ export type MarginaliaOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   cover?: Prisma.SortOrder
   book?: Prisma.SortOrder
   author?: Prisma.SortOrder
@@ -311,6 +322,7 @@ export type MarginaliaScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Marginalia"> | number
   userId?: Prisma.IntWithAggregatesFilter<"Marginalia"> | number
   title?: Prisma.StringWithAggregatesFilter<"Marginalia"> | string
+  description?: Prisma.StringWithAggregatesFilter<"Marginalia"> | string
   cover?: Prisma.StringWithAggregatesFilter<"Marginalia"> | string
   book?: Prisma.StringWithAggregatesFilter<"Marginalia"> | string
   author?: Prisma.StringWithAggregatesFilter<"Marginalia"> | string
@@ -321,6 +333,7 @@ export type MarginaliaScalarWhereWithAggregatesInput = {
 
 export type MarginaliaCreateInput = {
   title?: string
+  description?: string
   cover: string
   book: string
   author: string
@@ -335,6 +348,7 @@ export type MarginaliaUncheckedCreateInput = {
   id?: number
   userId: number
   title?: string
+  description?: string
   cover: string
   book: string
   author: string
@@ -346,6 +360,7 @@ export type MarginaliaUncheckedCreateInput = {
 
 export type MarginaliaUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   cover?: Prisma.StringFieldUpdateOperationsInput | string
   book?: Prisma.StringFieldUpdateOperationsInput | string
   author?: Prisma.StringFieldUpdateOperationsInput | string
@@ -360,6 +375,7 @@ export type MarginaliaUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   cover?: Prisma.StringFieldUpdateOperationsInput | string
   book?: Prisma.StringFieldUpdateOperationsInput | string
   author?: Prisma.StringFieldUpdateOperationsInput | string
@@ -373,6 +389,7 @@ export type MarginaliaCreateManyInput = {
   id?: number
   userId: number
   title?: string
+  description?: string
   cover: string
   book: string
   author: string
@@ -383,6 +400,7 @@ export type MarginaliaCreateManyInput = {
 
 export type MarginaliaUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   cover?: Prisma.StringFieldUpdateOperationsInput | string
   book?: Prisma.StringFieldUpdateOperationsInput | string
   author?: Prisma.StringFieldUpdateOperationsInput | string
@@ -395,6 +413,7 @@ export type MarginaliaUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   cover?: Prisma.StringFieldUpdateOperationsInput | string
   book?: Prisma.StringFieldUpdateOperationsInput | string
   author?: Prisma.StringFieldUpdateOperationsInput | string
@@ -417,6 +436,7 @@ export type MarginaliaCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   cover?: Prisma.SortOrder
   book?: Prisma.SortOrder
   author?: Prisma.SortOrder
@@ -434,6 +454,7 @@ export type MarginaliaMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   cover?: Prisma.SortOrder
   book?: Prisma.SortOrder
   author?: Prisma.SortOrder
@@ -446,6 +467,7 @@ export type MarginaliaMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   cover?: Prisma.SortOrder
   book?: Prisma.SortOrder
   author?: Prisma.SortOrder
@@ -522,6 +544,7 @@ export type MarginaliaUpdateOneRequiredWithoutCommentsNestedInput = {
 
 export type MarginaliaCreateWithoutUserInput = {
   title?: string
+  description?: string
   cover: string
   book: string
   author: string
@@ -534,6 +557,7 @@ export type MarginaliaCreateWithoutUserInput = {
 export type MarginaliaUncheckedCreateWithoutUserInput = {
   id?: number
   title?: string
+  description?: string
   cover: string
   book: string
   author: string
@@ -576,6 +600,7 @@ export type MarginaliaScalarWhereInput = {
   id?: Prisma.IntFilter<"Marginalia"> | number
   userId?: Prisma.IntFilter<"Marginalia"> | number
   title?: Prisma.StringFilter<"Marginalia"> | string
+  description?: Prisma.StringFilter<"Marginalia"> | string
   cover?: Prisma.StringFilter<"Marginalia"> | string
   book?: Prisma.StringFilter<"Marginalia"> | string
   author?: Prisma.StringFilter<"Marginalia"> | string
@@ -586,6 +611,7 @@ export type MarginaliaScalarWhereInput = {
 
 export type MarginaliaCreateWithoutCommentsInput = {
   title?: string
+  description?: string
   cover: string
   book: string
   author: string
@@ -599,6 +625,7 @@ export type MarginaliaUncheckedCreateWithoutCommentsInput = {
   id?: number
   userId: number
   title?: string
+  description?: string
   cover: string
   book: string
   author: string
@@ -625,6 +652,7 @@ export type MarginaliaUpdateToOneWithWhereWithoutCommentsInput = {
 
 export type MarginaliaUpdateWithoutCommentsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   cover?: Prisma.StringFieldUpdateOperationsInput | string
   book?: Prisma.StringFieldUpdateOperationsInput | string
   author?: Prisma.StringFieldUpdateOperationsInput | string
@@ -638,6 +666,7 @@ export type MarginaliaUncheckedUpdateWithoutCommentsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   cover?: Prisma.StringFieldUpdateOperationsInput | string
   book?: Prisma.StringFieldUpdateOperationsInput | string
   author?: Prisma.StringFieldUpdateOperationsInput | string
@@ -649,6 +678,7 @@ export type MarginaliaUncheckedUpdateWithoutCommentsInput = {
 export type MarginaliaCreateManyUserInput = {
   id?: number
   title?: string
+  description?: string
   cover: string
   book: string
   author: string
@@ -659,6 +689,7 @@ export type MarginaliaCreateManyUserInput = {
 
 export type MarginaliaUpdateWithoutUserInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   cover?: Prisma.StringFieldUpdateOperationsInput | string
   book?: Prisma.StringFieldUpdateOperationsInput | string
   author?: Prisma.StringFieldUpdateOperationsInput | string
@@ -671,6 +702,7 @@ export type MarginaliaUpdateWithoutUserInput = {
 export type MarginaliaUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   cover?: Prisma.StringFieldUpdateOperationsInput | string
   book?: Prisma.StringFieldUpdateOperationsInput | string
   author?: Prisma.StringFieldUpdateOperationsInput | string
@@ -683,6 +715,7 @@ export type MarginaliaUncheckedUpdateWithoutUserInput = {
 export type MarginaliaUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
   cover?: Prisma.StringFieldUpdateOperationsInput | string
   book?: Prisma.StringFieldUpdateOperationsInput | string
   author?: Prisma.StringFieldUpdateOperationsInput | string
@@ -726,6 +759,7 @@ export type MarginaliaSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   id?: boolean
   userId?: boolean
   title?: boolean
+  description?: boolean
   cover?: boolean
   book?: boolean
   author?: boolean
@@ -741,6 +775,7 @@ export type MarginaliaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   id?: boolean
   userId?: boolean
   title?: boolean
+  description?: boolean
   cover?: boolean
   book?: boolean
   author?: boolean
@@ -754,6 +789,7 @@ export type MarginaliaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   id?: boolean
   userId?: boolean
   title?: boolean
+  description?: boolean
   cover?: boolean
   book?: boolean
   author?: boolean
@@ -767,6 +803,7 @@ export type MarginaliaSelectScalar = {
   id?: boolean
   userId?: boolean
   title?: boolean
+  description?: boolean
   cover?: boolean
   book?: boolean
   author?: boolean
@@ -775,7 +812,7 @@ export type MarginaliaSelectScalar = {
   updatedAt?: boolean
 }
 
-export type MarginaliaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "cover" | "book" | "author" | "contentEn" | "createdAt" | "updatedAt", ExtArgs["result"]["marginalia"]>
+export type MarginaliaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "description" | "cover" | "book" | "author" | "contentEn" | "createdAt" | "updatedAt", ExtArgs["result"]["marginalia"]>
 export type MarginaliaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   comments?: boolean | Prisma.Marginalia$commentsArgs<ExtArgs>
@@ -798,6 +835,7 @@ export type $MarginaliaPayload<ExtArgs extends runtime.Types.Extensions.Internal
     id: number
     userId: number
     title: string
+    description: string
     cover: string
     book: string
     author: string
@@ -1232,6 +1270,7 @@ export interface MarginaliaFieldRefs {
   readonly id: Prisma.FieldRef<"Marginalia", 'Int'>
   readonly userId: Prisma.FieldRef<"Marginalia", 'Int'>
   readonly title: Prisma.FieldRef<"Marginalia", 'String'>
+  readonly description: Prisma.FieldRef<"Marginalia", 'String'>
   readonly cover: Prisma.FieldRef<"Marginalia", 'String'>
   readonly book: Prisma.FieldRef<"Marginalia", 'String'>
   readonly author: Prisma.FieldRef<"Marginalia", 'String'>

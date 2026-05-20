@@ -1,22 +1,41 @@
 import Comment from '@/components/comment/comment'
+import { getMarginalia } from '@/lib/marginalia'
+import { Marginalia } from '@/types/api/marginalia'
 import { ArrowLeftIcon } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
-export default function Page() {
+export default async function Page({
+    params,
+}: {
+    params: Promise<{ slug: string }>
+}) {
+    const { slug } = await params
+
+    const marginalia: Marginalia = await getMarginalia(slug)
+
+    const { cover, book, author, createdAt, title, description, contentEn } =
+        marginalia
+
     return (
         <div className="max-w-5xl mx-auto h-full overflow-hidden">
             <div className="py-12">
-                <button className="flex items-center gap-3 text-sm font-medium text-default/60">
-                    <ArrowLeftIcon className="text-default/60" width={18} />
-                    All entries
-                </button>
+                <Link href="/">
+                    <button className="flex group transition cursor-pointer hover:text-default items-center gap-3 text-sm font-medium text-default/60">
+                        <ArrowLeftIcon
+                            className="text-default/60 group-hover:scale-105 group-hover:text-default"
+                            width={18}
+                        />
+                        All entries
+                    </button>
+                </Link>
             </div>
             <div className="grid grid-cols-10">
                 <div className="col-span-3 flex flex-col gap-8">
                     <div>
                         <Image
-                            className="grayscale w-44 h-64"
-                            src={'/image.png'}
+                            className="grayscale w-44 h-64 object-cover"
+                            src={cover}
                             width={150}
                             height={150}
                             alt="Cover"
@@ -28,7 +47,7 @@ export default function Page() {
                                 BOOK
                             </span>
                             <span className="text-xs font-display text-default font-medium">
-                                Being and Time
+                                {book}
                             </span>
                         </div>
                         <div className="flex flex-col gap-1">
@@ -36,7 +55,7 @@ export default function Page() {
                                 AUTHOR
                             </span>
                             <span className="text-xs font-display text-default font-medium">
-                                Martin Heidegger
+                                {author}
                             </span>
                         </div>
                         <div className="flex flex-col gap-1">
@@ -44,7 +63,9 @@ export default function Page() {
                                 WRITTEN
                             </span>
                             <span className="text-xs font-display text-default/60 font-medium">
-                                March 14, 2024
+                                {new Date(createdAt).toLocaleDateString(
+                                    'en-US',
+                                )}
                             </span>
                         </div>
                         <div className="flex flex-col gap-1 max-w-48 border-t border-foreground/10">
@@ -61,36 +82,13 @@ export default function Page() {
                 </div>
                 <div className="col-span-7 flex flex-col gap-8">
                     <h1 className="font-display text-3xl font-medium text-default tracking-wide">
-                        On the weight of being thrown
+                        {title}
                     </h1>
                     <h2 className="pl-6 border-l-2 border-foreground/10 font-display text-md leading-7 text-default/60 tracking-wide italic">
-                        There is something vertiginous about the idea that we
-                        never chose to be here — that existence precedes any
-                        possible consent to it.
+                        {description}
                     </h2>
                     <p className="font-display text-default tracking-wide leading-7">
-                        There is something vertiginous about the idea that we
-                        never chose to be here — that existence precedes any
-                        possible consent to it. Heidegger calls this
-                        Geworfenheit, thrownness, and I find the word more
-                        honest than most philosophical terms. We are thrown,
-                        like objects, into a world already furnished with
-                        meaning we did not author.
-                        <br />
-                        <br /> What strikes me is not the pessimism often read
-                        into this. It is the opposite. If I was thrown without
-                        my choosing, then whatever I do with the throw is
-                        entirely mine. The arc after release belongs to me.
-                        Heidegger calls this projection — Entwurf — and I think
-                        the spatial metaphor is deliberate. We are always
-                        already in motion. The question is whether we own the
-                        trajectory. <br />
-                        <br /> I read this on a Tuesday evening in February when
-                        the light was leaving early and I felt, briefly, the
-                        absurdity of sitting in a warm room while everything
-                        outside continued without my permission. The book did
-                        not comfort me. It just made the absurdity more precise,
-                        which is sometimes the same thing.
+                        {contentEn}
                     </p>
                     <div className="flex flex-col py-8 border-t border-default/10 gap-4">
                         <h2 className="font-display tracking-wider">

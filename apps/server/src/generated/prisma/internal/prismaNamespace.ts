@@ -684,6 +684,7 @@ export const MarginaliaScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   title: 'title',
+  description: 'description',
   cover: 'cover',
   book: 'book',
   author: 'author',

@@ -16,6 +16,12 @@ export class MarginaliaService {
         return await this.marginaliaRepository.findAll()
     }
 
+    async find(title: string) {
+        const res = await this.marginaliaRepository.find(title)
+
+        return res
+    }
+
     async findById(id: number) {
         const res = await this.marginaliaRepository.findById(id)
 
