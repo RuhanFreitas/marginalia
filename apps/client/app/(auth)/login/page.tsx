@@ -4,20 +4,21 @@ import { login } from '@/lib/auth'
 import { LockIcon, MailIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { useAuth } from '@/context/AuthContext'
 
 export default function Page() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
+    const { login: loginUser, user } = useAuth()
+
     const router = useRouter()
 
     useEffect(() => {
-        const t = localStorage.getItem('token')
-
-        if (t) {
-            router.replace('/') // impede voltar com back
+        if (user) {
+            router.replace('/')
         }
-    }, [])
+    }, [user, router])
 
     async function handleSubmit(e: any) {
         e.preventDefault()
@@ -27,7 +28,9 @@ export default function Page() {
             password,
         }
 
-        await login(body)
+        const res = await login(body)
+
+        loginUser(res.user, res.token)
 
         router.push('/')
     }

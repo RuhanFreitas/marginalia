@@ -3,22 +3,17 @@
 import { register } from '@/lib/auth'
 import { LockIcon, MailIcon, User2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useAuth } from '@/context/AuthContext'
 
 export default function Page() {
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
 
+    const { login: loginUser } = useAuth()
+
     const router = useRouter()
-
-    useEffect(() => {
-        const t = localStorage.getItem('token')
-
-        if (t) {
-            router.replace('/')
-        }
-    }, [])
 
     async function handleSubmit(e: any) {
         e.preventDefault()
@@ -29,7 +24,9 @@ export default function Page() {
             password,
         }
 
-        await register(body)
+        const res = await register(body)
+
+        loginUser(res.user, res.token)
 
         router.push('/')
     }

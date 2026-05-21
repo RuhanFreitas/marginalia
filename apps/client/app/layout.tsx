@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/navbar/navbar'
 import Footer from '@/components/footer/footer'
+import { AuthProvider } from '@/context/AuthContext'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -30,9 +31,11 @@ export default function RootLayout({
             className={`${inter.className} ${inter.variable} ${baskerville.variable} light`}
         >
             <body className="bg-background h-full">
-                <Navbar />
-                {children}
-                <Footer />
+                <AuthProvider>
+                    <Navbar />
+                    {children}
+                    <Footer />
+                </AuthProvider>
             </body>
         </html>
     )

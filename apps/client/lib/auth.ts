@@ -9,7 +9,7 @@ export async function login(body: any) {
 
     const data = await res.json()
 
-    localStorage.setItem('token', data.token)
+    return data
 }
 
 export async function register(body: any) {
@@ -23,5 +23,5 @@ export async function register(body: any) {
 
     const data = await res.json()
 
-    localStorage.setItem('token', data.token)
+    return data
 }

@@ -2,15 +2,10 @@
 
 import Link from 'next/link'
 import Toggle from '../toggle/toggle'
-import { useEffect, useState } from 'react'
+import { useAuth } from '@/context/AuthContext'
 
 export default function Navbar() {
-    const [token, setToken] = useState<string | null>(null)
-
-    useEffect(() => {
-        const t = localStorage.getItem('token')
-        setToken(t)
-    }, [])
+    const { user } = useAuth()
 
     return (
         <nav className="sticky top-0 z-100 bg-background border-b border-foreground/10">
@@ -25,8 +20,14 @@ export default function Navbar() {
                 </div>
 
                 <div className="flex gap-4">
-                    {token ? (
-                        <button>...</button>
+                    {user ? (
+                        user ? (
+                            <button className="text-default text-sm font-display border border-foreground/10 px-4 py-2">
+                                {user.name.split(' ')[0]}
+                            </button>
+                        ) : (
+                            <button>...</button>
+                        )
                     ) : (
                         <>
                             <Link href="/login">
