@@ -11,9 +11,11 @@ export default function Navbar() {
         <nav className="sticky top-0 z-100 bg-background border-b border-foreground/10">
             <div className="mx-auto max-w-5xl py-6 flex justify-between items-center px-8 sm:px-0">
                 <div className="flex gap-4 items-center">
-                    <span className="font-display text-2xl font-semibold tracking-wide text-default">
-                        Marginalia
-                    </span>
+                    <Link href="/">
+                        <span className="font-display text-2xl font-semibold tracking-wide text-default">
+                            Marginalia
+                        </span>
+                    </Link>
                     <span className="text-default/60 hidden text-xs font-semibold tracking-widest sm:inline">
                         A READER'S NOTES
                     </span>
@@ -22,9 +24,11 @@ export default function Navbar() {
                 <div className="flex gap-4">
                     {user ? (
                         user ? (
-                            <button className="text-default text-sm font-display border border-foreground/10 px-4 py-2">
-                                {user.name.split(' ')[0]}
-                            </button>
+                            <Link href="/settings">
+                                <button className="text-default text-sm font-display hover:text-default-foreground hover:bg-foreground border border-foreground/10 px-4 py-2">
+                                    {user.name.split(' ')[0]}
+                                </button>
+                            </Link>
                         ) : (
                             <button>...</button>
                         )
