@@ -1,6 +1,39 @@
-import { Link, LockIcon, MailIcon, User2Icon } from 'lucide-react'
+'use client'
 
-export default async function Page() {
+import { register } from '@/lib/auth'
+import { LockIcon, MailIcon, User2Icon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
+export default function Page() {
+    const [email, setEmail] = useState('')
+    const [name, setName] = useState('')
+    const [password, setPassword] = useState('')
+
+    const router = useRouter()
+
+    useEffect(() => {
+        const t = localStorage.getItem('token')
+
+        if (t) {
+            router.replace('/')
+        }
+    }, [])
+
+    async function handleSubmit(e: any) {
+        e.preventDefault()
+
+        const body = {
+            email,
+            name,
+            password,
+        }
+
+        await register(body)
+
+        router.push('/')
+    }
+
     return (
         <div className="h-screen flex items-center justify-center">
             <div className="absolute min-w-sm top-40 mx-auto flex flex-col justify-center items-center gap-12">
@@ -12,7 +45,10 @@ export default async function Page() {
                         Join the conversation around philosophical thoughts
                     </span>
                 </div>
-                <form className="w-full flex flex-col gap-6">
+                <form
+                    onSubmit={handleSubmit}
+                    className="w-full flex flex-col gap-6"
+                >
                     <div className="flex flex-col gap-1">
                         <label className="flex items-center gap-2">
                             <MailIcon width={14} className="text-default/60" />
@@ -21,6 +57,7 @@ export default async function Page() {
                             </span>
                         </label>
                         <input
+                            onChange={(e) => setEmail(e.target.value)}
                             className="py-3 px-4 text-default/60 font-display text-sm focus:outline-0 focus:border border border-foreground/20 focus:border-foreground"
                             type="text"
                             placeholder="your@email.com"
@@ -34,6 +71,7 @@ export default async function Page() {
                             </span>
                         </label>
                         <input
+                            onChange={(e) => setName(e.target.value)}
                             className="py-3 px-4 text-default/60 font-display text-sm focus:outline-0 focus:border border border-foreground/20 focus:border-foreground"
                             type="text"
                             placeholder="Sophia"
@@ -47,6 +85,7 @@ export default async function Page() {
                             </span>
                         </label>
                         <input
+                            onChange={(e) => setPassword(e.target.value)}
                             className="py-3 px-4 text-default/60 font-display text-sm focus:outline-0 focus:border border border-foreground/20 focus:border-foreground"
                             type="password"
                             placeholder="••••••"
@@ -56,7 +95,7 @@ export default async function Page() {
                         <span>REGISTER</span>
                     </button>
                     <span className="mx-auto text-xs font-display tracking-wider font-medium text-default/60">
-                        Don't have an account? Register
+                        Already have an account? Log In
                     </span>
                 </form>
             </div>
