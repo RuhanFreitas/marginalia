@@ -3,7 +3,7 @@ import { Link, LockIcon, MailIcon, User2Icon } from 'lucide-react'
 export default async function Page() {
     return (
         <div className="h-screen flex items-center justify-center">
-            <div className="absolute top-40 mx-auto flex flex-col justify-center items-center gap-12">
+            <div className="absolute min-w-sm top-40 mx-auto flex flex-col justify-center items-center gap-12">
                 <div className="flex flex-col gap-3 items-center justify-center">
                     <h1 className="text-default font-display text-3xl">
                         Create account
@@ -12,7 +12,7 @@ export default async function Page() {
                         Join the conversation around philosophical thoughts
                     </span>
                 </div>
-                <form className="max-w-xs w-full flex flex-col gap-6">
+                <form className="w-full flex flex-col gap-6">
                     <div className="flex flex-col gap-1">
                         <label className="flex items-center gap-2">
                             <MailIcon width={14} className="text-default/60" />
@@ -56,7 +56,7 @@ export default async function Page() {
                         <span>REGISTER</span>
                     </button>
                     <span className="mx-auto text-xs font-display tracking-wider font-medium text-default/60">
-                        Already have an account? Log In
+                        Don't have an account? Register
                     </span>
                 </form>
             </div>
