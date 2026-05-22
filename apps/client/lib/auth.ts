@@ -1,3 +1,4 @@
+import { handleJsonResponse, parseApiError } from '@/lib/api'
 import type { AuthResponse, LoginBody, RegisterBody } from '@/types/api/auth'
 
 export async function login(body: LoginBody): Promise<AuthResponse> {
@@ -9,13 +10,7 @@ export async function login(body: LoginBody): Promise<AuthResponse> {
         body: JSON.stringify(body),
     })
 
-    const data = await res.json()
-
-    if (!res.ok) {
-        throw new Error(data.message || 'Login failed')
-    }
-
-    return data
+    return handleJsonResponse<AuthResponse>(res, 'Login failed')
 }
 
 export async function register(body: RegisterBody): Promise<AuthResponse> {
@@ -27,16 +22,13 @@ export async function register(body: RegisterBody): Promise<AuthResponse> {
         body: JSON.stringify(body),
     })
 
-    const data = await res.json()
-
-    if (!res.ok) {
-        throw new Error('Please, enter a valid data format.')
-    }
-
-    return data
+    return handleJsonResponse<AuthResponse>(
+        res,
+        'Please, enter a valid data format',
+    )
 }
 
-export async function deleteAccount(token: string) {
+export async function deleteAccount(token: string): Promise<void> {
     const res = await fetch(`http://localhost:3001/user`, {
         method: 'DELETE',
         headers: {
@@ -44,5 +36,7 @@ export async function deleteAccount(token: string) {
         },
     })
 
-    console.log(res)
+    if (!res.ok) {
+        throw new Error(await parseApiError(res, 'Failed to delete account'))
+    }
 }

@@ -1,3 +1,4 @@
+import { handleJsonResponse } from '@/lib/api'
 import type { UpdateUserBody, User } from '@/types/api/user'
 
 export async function updateAccount(
@@ -13,5 +14,5 @@ export async function updateAccount(
         body: JSON.stringify(body),
     })
 
-    return res.json()
+    return handleJsonResponse<User>(res, 'Failed to update account')
 }

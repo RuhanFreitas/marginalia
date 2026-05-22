@@ -1,14 +1,16 @@
+import { handleJsonResponse, parseApiError } from '@/lib/api'
 import type { Comment, CreateCommentBody } from '@/types/api/comment'
 
 export async function getComments(slug: string): Promise<Comment[]> {
     const res = await fetch(`http://localhost:3001/comment/${slug}/comments`)
 
-    if (!res.ok) return []
-
-    return await res.json()
+    return handleJsonResponse<Comment[]>(res, 'Failed to load comments')
 }
 
-export async function postComment(body: CreateCommentBody, token: string) {
+export async function postComment(
+    body: CreateCommentBody,
+    token: string,
+): Promise<void> {
     const res = await fetch('http://localhost:3001/comment', {
         method: 'POST',
         headers: {
@@ -18,12 +20,15 @@ export async function postComment(body: CreateCommentBody, token: string) {
         body: JSON.stringify(body),
     })
 
-    if (!res.ok) return
-
-    return res
+    if (!res.ok) {
+        throw new Error(await parseApiError(res, 'Failed to post comment'))
+    }
 }
 
-export async function replyComment(body: CreateCommentBody, token: string) {
+export async function replyComment(
+    body: CreateCommentBody,
+    token: string,
+): Promise<void> {
     const res = await fetch('http://localhost:3001/comment', {
         method: 'POST',
         headers: {
@@ -33,7 +38,7 @@ export async function replyComment(body: CreateCommentBody, token: string) {
         body: JSON.stringify(body),
     })
 
-    if (!res.ok) return
-
-    return res
+    if (!res.ok) {
+        throw new Error(await parseApiError(res, 'Failed to post reply'))
+    }
 }

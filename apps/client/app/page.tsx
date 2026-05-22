@@ -1,12 +1,26 @@
-import Card from '@/components/card/card'
 import List from '@/components/list/list'
+import PageError from '@/components/pageError/pageError'
 import Search from '@/components/search/search'
 import { SearchProvider } from '@/context/SearchContext'
+import { getErrorMessage } from '@/lib/api'
 import { getAllMarginalias } from '@/lib/marginalia'
 import { Marginalia } from '@/types/api/marginalia'
 
 export default async function Page() {
-    const marginalias: Marginalia[] = await getAllMarginalias()
+    let marginalias: Marginalia[] = []
+
+    try {
+        marginalias = await getAllMarginalias()
+    } catch (err: unknown) {
+        return (
+            <PageError
+                message={getErrorMessage(
+                    err,
+                    'Could not load entries. Please try again later',
+                )}
+            />
+        )
+    }
 
     if (!marginalias.length) {
         return (

@@ -1,9 +1,12 @@
 'use client'
 
+import FormError from '@/components/formError/formError'
 import { useAuth } from '@/context/AuthContext'
 import { useRequireAuth } from '@/hooks/useRequireAuth'
+import { getErrorMessage } from '@/lib/api'
 import { deleteAccount } from '@/lib/auth'
 import { updateAccount } from '@/lib/user'
+import { validateUpdateAccount } from '@/lib/validation'
 import {
     ArrowLeftIcon,
     LockIcon,
@@ -24,6 +27,11 @@ export default function Page() {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
 
+    const [updateError, setUpdateError] = useState('')
+    const [deleteError, setDeleteError] = useState('')
+    const [updateLoading, setUpdateLoading] = useState(false)
+    const [deleteLoading, setDeleteLoading] = useState(false)
+
     const router = useRouter()
 
     const { user, clear, setUser } = useAuth()
@@ -35,31 +43,68 @@ export default function Page() {
     async function handleUpdate(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
-        const token = localStorage.token
-
         const data = {
-            ...(name && { name }),
-            ...(email && { email }),
+            ...(name.trim() && { name: name.trim() }),
+            ...(email.trim() && { email: email.trim() }),
             ...(password && { password }),
         }
 
-        const user = await updateAccount(data, token)
+        const validationError = validateUpdateAccount(
+            data,
+            password,
+            confirmPassword,
+        )
+        if (validationError) {
+            setUpdateError(validationError)
+            return
+        }
 
-        setUser(user)
+        setUpdateError('')
+        setUpdateLoading(true)
 
-        console.log(user)
+        try {
+            const token = localStorage.getItem('token')
+
+            if (!token) {
+                throw new Error('Session expired. Please sign in again')
+            }
+
+            const updatedUser = await updateAccount(data, token)
+
+            setUser(updatedUser)
+            setName('')
+            setEmail('')
+            setPassword('')
+            setConfirmPassword('')
+        } catch (err: unknown) {
+            setUpdateError(getErrorMessage(err, 'Failed to update account'))
+        } finally {
+            setUpdateLoading(false)
+        }
     }
 
     async function handleDelete(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
-        const token = localStorage.token
+        setDeleteError('')
+        setDeleteLoading(true)
 
-        await deleteAccount(token)
+        try {
+            const token = localStorage.getItem('token')
 
-        clear()
+            if (!token) {
+                throw new Error('Session expired. Please sign in again')
+            }
 
-        router.push('/')
+            await deleteAccount(token)
+
+            clear()
+            router.push('/')
+        } catch (err: unknown) {
+            setDeleteError(getErrorMessage(err, 'Failed to delete account'))
+        } finally {
+            setDeleteLoading(false)
+        }
     }
 
     return (
@@ -113,7 +158,7 @@ export default function Page() {
                         </label>
                         <input
                             onChange={(e) => setPassword(e.target.value)}
-                            type="text"
+                            type="password"
                             placeholder="••••••"
                             className="mb-4 text-default/60 font-display w-full text-sm outline-0 py-3 px-4 border border-default/10"
                         />
@@ -122,14 +167,21 @@ export default function Page() {
                         </label>
                         <input
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            type="text"
+                            type="password"
                             placeholder="••••••"
                             className="text-default/60 font-display w-full text-sm outline-0 py-3 px-4 border border-default/10"
                         />
                     </div>
+
+                    <FormError message={updateError} align="start" />
+
                     <div className="pt-6">
-                        <button className="text-default cursor-pointer hover:bg-default hover:text-default-foreground transition text-sm flex tracking-wide gap-2 items-center px-6 py-4 border border-default/10">
-                            <Upload width={12} /> SAVE CHANGES
+                        <button
+                            disabled={updateLoading}
+                            className="text-default cursor-pointer hover:bg-default hover:text-default-foreground transition text-sm flex tracking-wide gap-2 items-center px-6 py-4 border border-default/10 disabled:opacity-60"
+                        >
+                            <Upload width={12} />{' '}
+                            {updateLoading ? 'SAVING...' : 'SAVE CHANGES'}
                         </button>
                     </div>
                 </form>
@@ -143,9 +195,16 @@ export default function Page() {
                     <span className="text-default/60 tracking-wide text-sm">
                         Permanently delete your account and all associated data
                     </span>
+
+                    <FormError message={deleteError} align="start" />
+
                     <div className="pt-6">
-                        <button className="text-default cursor-pointer hover:bg-default hover:text-default-foreground text-sm flex tracking-wide gap-2 items-center px-6 py-4 border border-default/10">
-                            <Trash2Icon width={12} /> DELETE ACCOUNT
+                        <button
+                            disabled={deleteLoading}
+                            className="text-default cursor-pointer hover:bg-default hover:text-default-foreground text-sm flex tracking-wide gap-2 items-center px-6 py-4 border border-default/10 disabled:opacity-60"
+                        >
+                            <Trash2Icon width={12} />{' '}
+                            {deleteLoading ? 'DELETING...' : 'DELETE ACCOUNT'}
                         </button>
                     </div>
                 </form>

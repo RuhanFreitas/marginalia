@@ -1,6 +1,11 @@
 'use client'
 
+import FormError from '@/components/formError/formError'
 import { useAuth } from '@/context/AuthContext'
+import { getErrorMessage } from '@/lib/api'
+import { replyComment } from '@/lib/comment'
+import { validateComment } from '@/lib/validation'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 type ReplyBoxProps = {
@@ -17,23 +22,45 @@ export default function ReplyBox({
     onSuccess,
 }: ReplyBoxProps) {
     const { user } = useAuth()
+    const router = useRouter()
 
     const [content, setContent] = useState('')
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
     const [open, setOpen] = useState(true)
 
     async function handleSubmit() {
-        if (!content.trim()) return
+        const validationError = validateComment(content)
+        if (validationError) {
+            setError(validationError)
+            return
+        }
 
+        setError('')
         setLoading(true)
 
         try {
             const token = localStorage.getItem('token')
 
+            if (!token) {
+                throw new Error('Sign in to post a reply')
+            }
+
+            await replyComment(
+                {
+                    content: content.trim(),
+                    marginaliaId,
+                    parentId: commentId,
+                },
+                token,
+            )
+
             setContent('')
             setOpen(false)
-
             onSuccess?.()
+            router.refresh()
+        } catch (err: unknown) {
+            setError(getErrorMessage(err, 'Failed to post reply'))
         } finally {
             setLoading(false)
         }
@@ -50,10 +77,15 @@ export default function ReplyBox({
             <div className="flex flex-col gap-3 w-full">
                 <textarea
                     value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                    onChange={(e) => {
+                        setContent(e.target.value)
+                        if (error) setError('')
+                    }}
                     placeholder="Write a reply..."
                     className="w-full min-h-[80px] p-3 border border-default/10 text-sm resize-none outline-0"
                 />
+
+                <FormError message={error} align="start" />
 
                 <div className="flex items-center gap-4">
                     <button

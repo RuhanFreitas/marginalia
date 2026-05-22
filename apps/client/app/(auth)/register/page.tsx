@@ -1,6 +1,9 @@
 'use client'
 
+import FormError from '@/components/formError/formError'
+import { getErrorMessage } from '@/lib/api'
 import { register } from '@/lib/auth'
+import { validateRegister } from '@/lib/validation'
 import { LockIcon, MailIcon, User2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { FormEvent, useState } from 'react'
@@ -25,19 +28,27 @@ export default function Page() {
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
+        const validationError = validateRegister(email, name, password)
+        if (validationError) {
+            setError(validationError)
+            return
+        }
+
         setError('')
         setLoading(true)
 
         try {
-            const res = await register({ email, name, password })
+            const res = await register({
+                email: email.trim(),
+                name: name.trim(),
+                password,
+            })
 
             loginUser(res.user, res.token)
 
             router.push('/')
         } catch (err: unknown) {
-            setError(
-                err instanceof Error ? err.message : 'Registration failed',
-            )
+            setError(getErrorMessage(err, 'Registration failed'))
         } finally {
             setLoading(false)
         }
@@ -100,11 +111,7 @@ export default function Page() {
                             placeholder="••••••"
                         />
                     </div>
-                    {error && (
-                        <p className="font-display text-default/60 text-xs text-center">
-                            {error}
-                        </p>
-                    )}
+                    <FormError message={error} />
                     <button
                         disabled={loading}
                         className="bg-foreground py-3 text-default-foreground tracking-wider text-xs font-medium"

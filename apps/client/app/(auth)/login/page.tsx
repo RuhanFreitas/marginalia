@@ -1,6 +1,9 @@
 'use client'
 
+import FormError from '@/components/formError/formError'
+import { getErrorMessage } from '@/lib/api'
 import { login } from '@/lib/auth'
+import { validateLogin } from '@/lib/validation'
 import { LockIcon, MailIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { FormEvent, useState } from 'react'
@@ -24,17 +27,23 @@ export default function Page() {
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
+        const validationError = validateLogin(email, password)
+        if (validationError) {
+            setError(validationError)
+            return
+        }
+
         setError('')
         setLoading(true)
 
         try {
-            const res = await login({ email, password })
+            const res = await login({ email: email.trim(), password })
 
             loginUser(res.user, res.token)
 
             router.push('/')
         } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : 'Login failed')
+            setError(getErrorMessage(err, 'Login failed'))
         } finally {
             setLoading(false)
         }
@@ -84,11 +93,7 @@ export default function Page() {
                         />
                     </div>
 
-                    {error && (
-                        <p className="font-display text-default/60 text-xs text-center">
-                            {error}.
-                        </p>
-                    )}
+                    <FormError message={error} />
                     <button
                         disabled={loading}
                         className="bg-foreground py-3 text-default-foreground tracking-wider text-xs font-medium"

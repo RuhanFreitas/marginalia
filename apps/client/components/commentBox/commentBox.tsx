@@ -1,39 +1,44 @@
 'use client'
 
+import FormError from '@/components/formError/formError'
 import { useAuth } from '@/context/AuthContext'
+import { getErrorMessage } from '@/lib/api'
 import { postComment } from '@/lib/comment'
+import { validateComment } from '@/lib/validation'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function CommentBox({ marginaliaId }: { marginaliaId: number }) {
     const [content, setContent] = useState('')
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
 
     const { user } = useAuth()
     const router = useRouter()
 
     async function handleSubmit() {
-        if (!content.trim()) return
+        const validationError = validateComment(content)
+        if (validationError) {
+            setError(validationError)
+            return
+        }
 
+        setError('')
         setLoading(true)
 
         try {
             const token = localStorage.getItem('token')
 
             if (!token) {
-                throw new Error('Not authorized')
+                throw new Error('Sign in to post a comment')
             }
 
-            const body = {
-                content,
-                marginaliaId,
-            }
-
-            const res = await postComment(body, token)
+            await postComment({ content: content.trim(), marginaliaId }, token)
 
             setContent('')
-
             router.refresh()
+        } catch (err: unknown) {
+            setError(getErrorMessage(err, 'Failed to post comment'))
         } finally {
             setLoading(false)
         }
@@ -48,10 +53,15 @@ export default function CommentBox({ marginaliaId }: { marginaliaId: number }) {
             <div className="flex flex-col gap-3 w-full">
                 <textarea
                     value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                    onChange={(e) => {
+                        setContent(e.target.value)
+                        if (error) setError('')
+                    }}
                     className="w-full min-h-[120px] p-4 border border-default/10 text-sm font-display text-default outline-0 resize-none"
                     placeholder="Share your thoughts..."
                 />
+
+                <FormError message={error} align="start" />
 
                 <button
                     onClick={handleSubmit}

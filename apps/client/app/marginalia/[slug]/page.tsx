@@ -1,7 +1,10 @@
 import Comment from '@/components/comment/comment'
 import CommentBox from '@/components/commentBox/commentBox'
+import FormError from '@/components/formError/formError'
+import PageError from '@/components/pageError/pageError'
 import { getComments } from '@/lib/comment'
 import { getMarginalia } from '@/lib/marginalia'
+import { getErrorMessage } from '@/lib/api'
 import type { Comment as CommentData } from '@/types/api/comment'
 import { Marginalia } from '@/types/api/marginalia'
 import { ArrowLeftIcon } from 'lucide-react'
@@ -15,8 +18,27 @@ export default async function Page({
 }) {
     const { slug } = await params
 
-    const marginalia: Marginalia = await getMarginalia(slug)
-    const comments: CommentData[] = await getComments(slug)
+    let marginalia: Marginalia
+
+    try {
+        marginalia = await getMarginalia(slug)
+    } catch (err: unknown) {
+        return (
+            <PageError
+                message={getErrorMessage(err, 'Entry not found')}
+                backLabel="All entries"
+            />
+        )
+    }
+
+    let comments: CommentData[] = []
+    let commentsError = ''
+
+    try {
+        comments = await getComments(slug)
+    } catch (err: unknown) {
+        commentsError = getErrorMessage(err, 'Failed to load comments')
+    }
 
     const { cover, book, author, createdAt, title, description, contentEn } =
         marginalia
@@ -88,7 +110,12 @@ export default async function Page({
                         <CommentBox marginaliaId={marginalia.id} />
 
                         <div className="flex flex-col gap-6 pb-12">
-                            {comments.length === 0 ? (
+                            {commentsError ? (
+                                <FormError
+                                    message={commentsError}
+                                    align="start"
+                                />
+                            ) : comments.length === 0 ? (
                                 <p className="text-sm text-default/60">
                                     No comments yet.
                                 </p>
