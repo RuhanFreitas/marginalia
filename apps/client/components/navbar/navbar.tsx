@@ -3,9 +3,10 @@
 import Link from 'next/link'
 import Toggle from '../toggle/toggle'
 import { useAuth } from '@/context/AuthContext'
+import { UserIcon } from 'lucide-react'
 
 export default function Navbar() {
-    const { user } = useAuth()
+    const { user, logout } = useAuth()
 
     return (
         <nav className="sticky top-0 z-100 bg-background border-b border-foreground/10">
@@ -23,25 +24,32 @@ export default function Navbar() {
 
                 <div className="flex gap-4">
                     {user ? (
-                        user ? (
-                            <Link href="/settings">
-                                <button className="text-default text-sm font-display hover:text-default-foreground hover:bg-foreground border border-foreground/10 px-4 py-2">
-                                    {user.name.split(' ')[0]}
+                        user && (
+                            <>
+                                <Link href="/settings">
+                                    <button className="flex cursor-pointer transition items-center gap-2 justify-center text-default text-xs font-display hover:text-default-foreground hover:bg-foreground border border-foreground/10 px-4 py-2">
+                                        <UserIcon width={12} />{' '}
+                                        {user.name.split(' ')[0]}
+                                    </button>
+                                </Link>
+                                <button
+                                    onClick={logout}
+                                    className="flex cursor-pointer transition items-center bg-foreground text-default-foreground hover:bg-default-foreground hover:text-default gap-2 text-xs border border-default/10 px-4 py-2"
+                                >
+                                    Log out
                                 </button>
-                            </Link>
-                        ) : (
-                            <button>...</button>
+                            </>
                         )
                     ) : (
                         <>
                             <Link href="/login">
-                                <button className="flex items-center hover:bg-foreground hover:text-default-foreground gap-2 text-default text-xs border border-default/10 px-4 py-2">
+                                <button className="flex cursor-pointer transition items-center hover:bg-foreground hover:text-default-foreground gap-2 text-default text-xs border border-default/10 px-4 py-2">
                                     Log In
                                 </button>
                             </Link>
 
                             <Link href="/register">
-                                <button className="flex items-center gap-2 border border-transparent hover:border-default/10 hover:bg-default-foreground hover:text-default bg-foreground text-default-foreground text-xs px-4 py-2">
+                                <button className="flex cursor-pointer transition items-center gap-2 border border-transparent hover:border-default/10 hover:bg-default-foreground hover:text-default bg-foreground text-default-foreground text-xs px-4 py-2">
                                     Sign Up
                                 </button>
                             </Link>

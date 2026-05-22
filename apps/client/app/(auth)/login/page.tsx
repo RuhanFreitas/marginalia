@@ -5,6 +5,7 @@ import { LockIcon, MailIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
+import Link from 'next/link'
 
 export default function Page() {
     const [email, setEmail] = useState('')
@@ -82,7 +83,10 @@ export default function Page() {
                         <span>LOGIN</span>
                     </button>
                     <span className="mx-auto text-xs font-display tracking-wider font-medium text-default/60">
-                        Don't have an account? Register
+                        Don't have an account?{' '}
+                        <Link className="text-default" href="/register">
+                            Register
+                        </Link>
                     </span>
                 </form>
             </div>

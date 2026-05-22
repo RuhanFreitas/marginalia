@@ -3,8 +3,10 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
 type User = {
+    id: string
     name: string
     email: string
+    role: string
 }
 
 type AuthContextType = {
@@ -12,6 +14,7 @@ type AuthContextType = {
     setUser: (u: User | null) => void
     login: (user: User, token: string) => void
     logout: () => void
+    clear: () => void
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
@@ -43,8 +46,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(null)
     }
 
+    function clear() {
+        localStorage.removeItem('user')
+        localStorage.removeItem('token')
+        setUser(null)
+    }
+
     return (
-        <AuthContext.Provider value={{ user, setUser, login, logout }}>
+        <AuthContext.Provider value={{ user, setUser, login, logout, clear }}>
             {children}
         </AuthContext.Provider>
     )

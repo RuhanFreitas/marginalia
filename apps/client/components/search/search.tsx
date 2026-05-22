@@ -1,11 +1,10 @@
-import { getAllMarginalias } from '@/lib/marginalia'
-import { Marginalia } from '@/types/api/marginalia'
+'use client'
+
+import { useSearch } from '@/context/SearchContext'
 import { SearchIcon } from 'lucide-react'
 
-export default async function Search() {
-    const marginalias: Marginalia[] = await getAllMarginalias()
-
-    const entries = marginalias.length
+export default function Search() {
+    const { query, setQuery, filtered } = useSearch()
 
     return (
         <div>
@@ -13,6 +12,8 @@ export default async function Search() {
                 <div className="my-auto flex items-center gap-2">
                     <SearchIcon className="text-default/60" width={12} />
                     <input
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
                         type="text"
                         placeholder="Search..."
                         className="border-none focus:outline-none rounded-md text-default text-sm"
@@ -20,7 +21,7 @@ export default async function Search() {
                 </div>
 
                 <span className="text-xs text-default/60">
-                    {entries} entries
+                    {filtered.length} entries
                 </span>
             </div>
         </div>

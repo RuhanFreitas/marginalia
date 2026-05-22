@@ -19,16 +19,6 @@ export class AuthService {
         private readonly hashService: HashService,
     ) {}
 
-    async createAdmin() {
-        const user = await this.userRepository.createAdmin()
-
-        const payload = { sub: user.id, role: user.role }
-
-        const userRes = new ResponseUserDTO(user)
-
-        return { token: this.JwtService.sign(payload), user: userRes }
-    }
-
     @HttpCode(HttpStatus.OK)
     async login(loginDTO: LoginDTO) {
         const user = await this.userRepository.findByEmail(loginDTO.email)

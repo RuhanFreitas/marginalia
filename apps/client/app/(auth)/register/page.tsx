@@ -5,6 +5,7 @@ import { LockIcon, MailIcon, User2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
+import Link from 'next/link'
 
 export default function Page() {
     const [email, setEmail] = useState('')
@@ -25,6 +26,8 @@ export default function Page() {
         }
 
         const res = await register(body)
+
+        console.log(res)
 
         loginUser(res.user, res.token)
 
@@ -92,7 +95,10 @@ export default function Page() {
                         <span>REGISTER</span>
                     </button>
                     <span className="mx-auto text-xs font-display tracking-wider font-medium text-default/60">
-                        Already have an account? Log In
+                        Already have an account?{' '}
+                        <Link className="text-default" href="/login">
+                            Login
+                        </Link>
                     </span>
                 </form>
             </div>

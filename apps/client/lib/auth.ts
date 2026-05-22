@@ -25,3 +25,14 @@ export async function register(body: any) {
 
     return data
 }
+
+export async function deleteAccount(token: string) {
+    const res = await fetch(`http://localhost:3001/user`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+
+    console.log(res)
+}

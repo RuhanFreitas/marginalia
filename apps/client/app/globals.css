@@ -22,3 +22,7 @@
     --font-sans: var(--font-inter);
     --font-display: var(--font-libre_baskerville);
 }
+
+svg {
+    @apply w-3 h-3;
+}
