@@ -1,9 +1,23 @@
-export type Comment = {
+export type CommentBase = {
     id: number
     content: string
+    parentId: number | null
+    userId: number
+    marginaliaId: number
     createdAt: string
-    user: {
+    updatedAt: string
+    user?: {
+        id: number
         name: string
     }
-    replies: Comment[]
+}
+
+export type Comment = CommentBase & {
+    replies?: Comment[]
+}
+
+export type CreateCommentBody = {
+    content: string
+    marginaliaId: number
+    parentId?: number
 }

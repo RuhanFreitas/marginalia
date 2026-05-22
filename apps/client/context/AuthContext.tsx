@@ -1,13 +1,7 @@
 'use client'
 
+import type { User } from '@/types/api/user'
 import { createContext, useContext, useEffect, useState } from 'react'
-
-type User = {
-    id: string
-    name: string
-    email: string
-    role: string
-}
 
 type AuthContextType = {
     user: User | null

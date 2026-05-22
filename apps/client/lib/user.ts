@@ -1,10 +1,9 @@
-type update = {
-    name?: string
-    email?: string
-    password?: string
-}
+import type { UpdateUserBody, User } from '@/types/api/user'
 
-export async function updateAccount(body: update, token: string) {
+export async function updateAccount(
+    body: UpdateUserBody,
+    token: string,
+): Promise<User> {
     const res = await fetch(`http://localhost:3001/user`, {
         method: 'PATCH',
         headers: {

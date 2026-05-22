@@ -1,4 +1,6 @@
-export async function login(body: any) {
+import type { AuthResponse, LoginBody, RegisterBody } from '@/types/api/auth'
+
+export async function login(body: LoginBody): Promise<AuthResponse> {
     const res = await fetch('http://localhost:3001/auth/login', {
         method: 'POST',
         headers: {
@@ -16,7 +18,7 @@ export async function login(body: any) {
     return data
 }
 
-export async function register(body: any) {
+export async function register(body: RegisterBody): Promise<AuthResponse> {
     const res = await fetch('http://localhost:3001/auth/register', {
         method: 'POST',
         headers: {

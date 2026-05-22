@@ -1,7 +1,8 @@
-import Comment, { CommentType } from '@/components/comment/comment'
+import Comment from '@/components/comment/comment'
 import CommentBox from '@/components/commentBox/commentBox'
 import { getComments } from '@/lib/comment'
 import { getMarginalia } from '@/lib/marginalia'
+import type { Comment as CommentData } from '@/types/api/comment'
 import { Marginalia } from '@/types/api/marginalia'
 import { ArrowLeftIcon } from 'lucide-react'
 import Image from 'next/image'
@@ -15,7 +16,7 @@ export default async function Page({
     const { slug } = await params
 
     const marginalia: Marginalia = await getMarginalia(slug)
-    const comments: CommentType[] = await getComments(slug)
+    const comments: CommentData[] = await getComments(slug)
 
     const { cover, book, author, createdAt, title, description, contentEn } =
         marginalia
@@ -75,7 +76,7 @@ export default async function Page({
                     </h2>
 
                     <div
-                        className="leading-7 text-default font-display font-normal tracking-wide"
+                        className="leading-8 text-default font-display tracking-wide"
                         dangerouslySetInnerHTML={{ __html: contentEn }}
                     />
 
@@ -92,7 +93,7 @@ export default async function Page({
                                     No comments yet.
                                 </p>
                             ) : (
-                                comments.map((comment: CommentType) => (
+                                comments.map((comment) => (
                                     <Comment
                                         key={comment.id}
                                         comment={comment}

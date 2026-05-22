@@ -1,4 +1,6 @@
-export async function getComments(slug: string) {
+import type { Comment, CreateCommentBody } from '@/types/api/comment'
+
+export async function getComments(slug: string): Promise<Comment[]> {
     const res = await fetch(`http://localhost:3001/comment/${slug}/comments`)
 
     if (!res.ok) return []
@@ -6,7 +8,7 @@ export async function getComments(slug: string) {
     return await res.json()
 }
 
-export async function postComment(body: any, token: string) {
+export async function postComment(body: CreateCommentBody, token: string) {
     const res = await fetch('http://localhost:3001/comment', {
         method: 'POST',
         headers: {
@@ -21,7 +23,7 @@ export async function postComment(body: any, token: string) {
     return res
 }
 
-export async function replyComment(body: any, token: string) {
+export async function replyComment(body: CreateCommentBody, token: string) {
     const res = await fetch('http://localhost:3001/comment', {
         method: 'POST',
         headers: {

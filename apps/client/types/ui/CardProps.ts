@@ -1,5 +1,3 @@
-import { CommentType } from '@/components/comment/comment'
-
 export type CardProps = {
     order: number
     book: string

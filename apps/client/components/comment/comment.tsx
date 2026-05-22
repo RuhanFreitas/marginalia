@@ -1,29 +1,15 @@
 'use client'
 
+import type { Comment } from '@/types/api/comment'
 import { CornerDownRightIcon } from 'lucide-react'
-import ReplyBox from '../replyBox/replyBox'
 import { useState } from 'react'
+import ReplyBox from '../replyBox/replyBox'
 
-export type CommentBase = {
-    id: number
-    content: string
-    parentId: number | null
-    userId: number
-    marginaliaId: number
-    createdAt: string
-    updatedAt: string
-
-    user?: {
-        id: number
-        name: string
-    }
+type CommentProps = {
+    comment: Comment
 }
 
-export type CommentType = CommentBase & {
-    replies?: CommentType[]
-}
-
-export default function Comment({ comment }: any) {
+export default function Comment({ comment }: CommentProps) {
     const [showReply, setShowReply] = useState(false)
 
     return (
@@ -57,9 +43,9 @@ export default function Comment({ comment }: any) {
                 )}
             </div>
 
-            {comment.replies?.length > 0 && (
+            {comment.replies && comment.replies.length > 0 && (
                 <div className="pl-14 border-l border-foreground/10 flex flex-col gap-4">
-                    {comment.replies.map((reply: any) => (
+                    {comment.replies.map((reply) => (
                         <Comment key={reply.id} comment={reply} />
                     ))}
                 </div>

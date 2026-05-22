@@ -3,7 +3,7 @@
 import { login } from '@/lib/auth'
 import { LockIcon, MailIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { FormEvent, useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import Link from 'next/link'
 import { useRedirectIfAuth } from '@/hooks/useRedirectIfAuth'
@@ -21,7 +21,7 @@ export default function Page() {
 
     const router = useRouter()
 
-    async function handleSubmit(e: any) {
+    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
         setError('')
@@ -33,8 +33,8 @@ export default function Page() {
             loginUser(res.user, res.token)
 
             router.push('/')
-        } catch (err: any) {
-            setError(err.message)
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Login failed')
         } finally {
             setLoading(false)
         }

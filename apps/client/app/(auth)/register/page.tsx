@@ -3,7 +3,7 @@
 import { register } from '@/lib/auth'
 import { LockIcon, MailIcon, User2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { useRedirectIfAuth } from '@/hooks/useRedirectIfAuth'
 import Link from 'next/link'
@@ -22,7 +22,7 @@ export default function Page() {
 
     const router = useRouter()
 
-    async function handleSubmit(e: any) {
+    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
         setError('')
@@ -34,8 +34,10 @@ export default function Page() {
             loginUser(res.user, res.token)
 
             router.push('/')
-        } catch (err: any) {
-            setError(err.message)
+        } catch (err: unknown) {
+            setError(
+                err instanceof Error ? err.message : 'Registration failed',
+            )
         } finally {
             setLoading(false)
         }

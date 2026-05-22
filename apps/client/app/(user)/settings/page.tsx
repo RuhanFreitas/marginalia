@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 
 export default function Page() {
     useRequireAuth()
@@ -32,7 +32,7 @@ export default function Page() {
 
     const { name: currentName, email: currentEmail } = user
 
-    async function handleUpdate(e: any) {
+    async function handleUpdate(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
         const token = localStorage.token
@@ -50,7 +50,7 @@ export default function Page() {
         console.log(user)
     }
 
-    async function handleDelete(e: any) {
+    async function handleDelete(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
         const token = localStorage.token

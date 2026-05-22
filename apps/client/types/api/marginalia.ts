@@ -1,4 +1,4 @@
-import { CommentType } from '@/components/comment/comment'
+import type { Comment } from '@/types/api/comment'
 
 export type Marginalia = {
     id: number
@@ -11,5 +11,5 @@ export type Marginalia = {
     contentEn: string
     createdAt: string
     updatedAt: string
-    comments: CommentType[]
+    comments: Comment[]
 }
