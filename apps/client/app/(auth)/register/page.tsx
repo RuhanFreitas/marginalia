@@ -5,9 +5,15 @@ import { LockIcon, MailIcon, User2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
+import { useRedirectIfAuth } from '@/hooks/useRedirectIfAuth'
 import Link from 'next/link'
 
 export default function Page() {
+    useRedirectIfAuth()
+
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
+
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
@@ -19,19 +25,20 @@ export default function Page() {
     async function handleSubmit(e: any) {
         e.preventDefault()
 
-        const body = {
-            email,
-            name,
-            password,
+        setError('')
+        setLoading(true)
+
+        try {
+            const res = await register({ email, name, password })
+
+            loginUser(res.user, res.token)
+
+            router.push('/')
+        } catch (err: any) {
+            setError(err.message)
+        } finally {
+            setLoading(false)
         }
-
-        const res = await register(body)
-
-        console.log(res)
-
-        loginUser(res.user, res.token)
-
-        router.push('/')
     }
 
     return (
@@ -91,8 +98,16 @@ export default function Page() {
                             placeholder="••••••"
                         />
                     </div>
-                    <button className="bg-foreground py-3 text-default-foreground tracking-wider text-xs font-medium">
-                        <span>REGISTER</span>
+                    {error && (
+                        <p className="font-display text-default/60 text-xs text-center">
+                            {error}
+                        </p>
+                    )}
+                    <button
+                        disabled={loading}
+                        className="bg-foreground py-3 text-default-foreground tracking-wider text-xs font-medium"
+                    >
+                        {loading ? 'Creating account...' : 'REGISTER'}
                     </button>
                     <span className="mx-auto text-xs font-display tracking-wider font-medium text-default/60">
                         Already have an account?{' '}

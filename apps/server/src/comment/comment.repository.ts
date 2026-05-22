@@ -14,6 +14,18 @@ import { UpdateCommentDTO } from './dto/update-comment.dto'
 export class CommentRepository {
     constructor(private readonly prisma: PrismaService) {}
 
+    async findByMarginaliaId(id: number) {
+        return this.prisma.comment.findMany({
+            where: { marginaliaId: id },
+            include: {
+                user: true,
+            },
+            orderBy: {
+                createdAt: 'asc',
+            },
+        })
+    }
+
     async create(
         createCommentDTO: CreateCommentDTO,
         id: number,

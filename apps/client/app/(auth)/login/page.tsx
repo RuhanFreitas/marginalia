@@ -6,8 +6,14 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import Link from 'next/link'
+import { useRedirectIfAuth } from '@/hooks/useRedirectIfAuth'
 
 export default function Page() {
+    useRedirectIfAuth()
+
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -15,25 +21,23 @@ export default function Page() {
 
     const router = useRouter()
 
-    useEffect(() => {
-        if (user) {
-            router.replace('/')
-        }
-    }, [user, router])
-
     async function handleSubmit(e: any) {
         e.preventDefault()
 
-        const body = {
-            email,
-            password,
+        setError('')
+        setLoading(true)
+
+        try {
+            const res = await login({ email, password })
+
+            loginUser(res.user, res.token)
+
+            router.push('/')
+        } catch (err: any) {
+            setError(err.message)
+        } finally {
+            setLoading(false)
         }
-
-        const res = await login(body)
-
-        loginUser(res.user, res.token)
-
-        router.push('/')
     }
 
     return (
@@ -79,8 +83,17 @@ export default function Page() {
                             placeholder="••••••"
                         />
                     </div>
-                    <button className="bg-foreground py-3 text-default-foreground tracking-wider text-xs font-medium">
-                        <span>LOGIN</span>
+
+                    {error && (
+                        <p className="font-display text-default/60 text-xs text-center">
+                            {error}.
+                        </p>
+                    )}
+                    <button
+                        disabled={loading}
+                        className="bg-foreground py-3 text-default-foreground tracking-wider text-xs font-medium"
+                    >
+                        {loading ? 'Logging in...' : 'LOGIN'}
                     </button>
                     <span className="mx-auto text-xs font-display tracking-wider font-medium text-default/60">
                         Don't have an account?{' '}

@@ -9,6 +9,10 @@ export async function login(body: any) {
 
     const data = await res.json()
 
+    if (!res.ok) {
+        throw new Error(data.message || 'Login failed')
+    }
+
     return data
 }
 
@@ -22,6 +26,10 @@ export async function register(body: any) {
     })
 
     const data = await res.json()
+
+    if (!res.ok) {
+        throw new Error('Please, enter a valid data format.')
+    }
 
     return data
 }

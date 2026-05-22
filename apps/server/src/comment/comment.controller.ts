@@ -2,6 +2,7 @@ import {
     Body,
     Controller,
     Delete,
+    Get,
     HttpCode,
     HttpStatus,
     Param,
@@ -20,12 +21,17 @@ import { RolesGuard } from '../guards/roles.guard'
 import { Role } from '../generated/prisma/enums'
 import { Roles } from '../decorators/roles.decorator'
 
-@UseGuards(AuthGuard('jwt'), RolesGuard)
-@Roles(Role.ADMIN, Role.USER)
 @Controller('comment')
 export class CommentController {
     constructor(private readonly commentService: CommentService) {}
 
+    @Get(':id/comments')
+    async getComments(@Param('id', ParseIntPipe) id: number) {
+        return await this.commentService.getComments(id)
+    }
+
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.ADMIN, Role.USER)
     @HttpCode(HttpStatus.OK)
     @Post()
     async create(
@@ -35,6 +41,8 @@ export class CommentController {
         return await this.commentService.create(createCommentDTO, req.user.sub)
     }
 
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.ADMIN, Role.USER)
     @HttpCode(HttpStatus.OK)
     @Patch(':id')
     async updateById(
@@ -49,6 +57,8 @@ export class CommentController {
         )
     }
 
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.ADMIN, Role.USER)
     @HttpCode(HttpStatus.OK)
     @Delete(':id')
     async delete(

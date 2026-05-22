@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuth } from '@/context/AuthContext'
+import { useRequireAuth } from '@/hooks/useRequireAuth'
 import { deleteAccount } from '@/lib/auth'
 import { updateAccount } from '@/lib/user'
 import {
@@ -16,6 +17,8 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function Page() {
+    useRequireAuth()
+
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
