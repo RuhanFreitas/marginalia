@@ -8,7 +8,7 @@ export default function Search() {
 
     return (
         <div>
-            <div className="flex justify-between items-center mx-auto max-w-5xl py-4 px-8 sm:px-0">
+            <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4 sm:px-0">
                 <div className="my-auto flex items-center gap-2">
                     <SearchIcon className="text-default/60" width={12} />
                     <input

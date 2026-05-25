@@ -1,7 +1,6 @@
 'use client'
 
 import FormError from '@/components/formError/formError'
-import { useAuth } from '@/context/AuthContext'
 import { getErrorMessage } from '@/lib/api'
 import { replyComment } from '@/lib/comment'
 import { validateComment } from '@/lib/validation'
@@ -21,7 +20,6 @@ export default function ReplyBox({
     onCancel,
     onSuccess,
 }: ReplyBoxProps) {
-    const { user } = useAuth()
     const router = useRouter()
 
     const [content, setContent] = useState('')
@@ -69,43 +67,39 @@ export default function ReplyBox({
     if (!open) return null
 
     return (
-        <div className="flex gap-4 mt-4 pb-2 border-foreground/10 pl-4">
-            <div className="w-7 h-7 flex items-center justify-center border border-default/10 text-xs font-display text-default/60">
-                {user?.name?.[0] ?? '?'}
-            </div>
+        <div className="mt-2 flex flex-col gap-3">
+            <textarea
+                value={content}
+                onChange={(e) => {
+                    setContent(e.target.value)
+                    if (error) setError('')
+                }}
+                placeholder="Write a reply..."
+                className="min-h-[80px] w-full resize-none border border-default/10 p-3 font-display text-sm text-default outline-0"
+            />
 
-            <div className="flex flex-col gap-3 w-full">
-                <textarea
-                    value={content}
-                    onChange={(e) => {
-                        setContent(e.target.value)
-                        if (error) setError('')
+            <FormError message={error} align="start" />
+
+            <div className="flex items-center gap-4">
+                <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={loading || !content.trim()}
+                    className="bg-default px-4 py-2 text-xs text-default-foreground"
+                >
+                    {loading ? 'POSTING...' : 'POST'}
+                </button>
+
+                <button
+                    type="button"
+                    onClick={() => {
+                        setOpen(false)
+                        onCancel?.()
                     }}
-                    placeholder="Write a reply..."
-                    className="w-full min-h-[80px] p-3 border border-default/10 text-sm resize-none outline-0"
-                />
-
-                <FormError message={error} align="start" />
-
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={handleSubmit}
-                        disabled={loading || !content.trim()}
-                        className="px-4 py-2 text-xs bg-default text-default-foreground"
-                    >
-                        {loading ? 'POSTING...' : 'POST'}
-                    </button>
-
-                    <button
-                        onClick={() => {
-                            setOpen(false)
-                            onCancel?.()
-                        }}
-                        className="text-xs text-default/60"
-                    >
-                        CANCEL
-                    </button>
-                </div>
+                    className="text-xs text-default/60"
+                >
+                    CANCEL
+                </button>
             </div>
         </div>
     )

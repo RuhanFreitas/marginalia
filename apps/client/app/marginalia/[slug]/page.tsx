@@ -44,61 +44,67 @@ export default async function Page({
         marginalia
 
     return (
-        <div className="max-w-5xl mx-auto h-full overflow-hidden">
-            <div className="py-12">
+        <div className="mx-auto h-full max-w-5xl px-6 md:px-0">
+            <div className="py-8 md:py-12">
                 <Link href="/">
-                    <button className="flex cursor-pointer hover:text-default items-center gap-3 text-sm text-default/60">
+                    <button className="flex cursor-pointer items-center gap-3 text-sm text-default/60 hover:text-default">
                         <ArrowLeftIcon width={18} />
                         All entries
                     </button>
                 </Link>
             </div>
 
-            <div className="grid grid-cols-10">
-                <div className="col-span-3 flex flex-col gap-8">
-                    <Image
-                        className="grayscale w-44 h-64 object-cover"
-                        src={cover}
-                        width={150}
-                        height={150}
-                        alt="Cover"
-                    />
+            <div className="grid grid-cols-1 gap-10 md:grid-cols-10 md:gap-8">
+                <aside className="md:col-span-3">
+                    <div className="grid grid-cols-[minmax(0,11rem)_1fr] items-start gap-6 md:grid-cols-1 md:gap-8">
+                        <div className="relative aspect-[3/4] w-full overflow-hidden md:aspect-auto md:h-64 md:w-44">
+                            <Image
+                                fill
+                                sizes="(max-width: 768px) 176px, 176px"
+                                className="object-cover grayscale"
+                                src={cover}
+                                alt="Cover"
+                            />
+                        </div>
 
-                    <div className="flex flex-col">
-                        <span className="text-[10px] text-default/60 pb-1">
-                            BOOK
-                        </span>
-                        <span className="text-xs font-display text-default pb-4">
-                            {book}
-                        </span>
+                        <div className="flex min-w-0 flex-col">
+                            <span className="pb-1 text-[10px] text-default/60">
+                                BOOK
+                            </span>
+                            <span className="pb-4 font-display text-xs text-default">
+                                {book}
+                            </span>
 
-                        <span className="text-[10px] text-default/60 pb-1">
-                            AUTHOR
-                        </span>
-                        <span className="text-xs font-display text-default pb-4">
-                            {author}
-                        </span>
+                            <span className="pb-1 text-[10px] text-default/60">
+                                AUTHOR
+                            </span>
+                            <span className="pb-4 font-display text-xs text-default">
+                                {author}
+                            </span>
 
-                        <span className="text-[10px] text-default/60 pb-1">
-                            WRITTEN
-                        </span>
-                        <span className="text-xs font-display text-default pb-4">
-                            {new Date(createdAt).toLocaleDateString('en-US')}
-                        </span>
+                            <span className="pb-1 text-[10px] text-default/60">
+                                WRITTEN
+                            </span>
+                            <span className="pb-4 font-display text-xs text-default">
+                                {new Date(createdAt).toLocaleDateString(
+                                    'en-US',
+                                )}
+                            </span>
+                        </div>
                     </div>
-                </div>
+                </aside>
 
-                <div className="col-span-7 flex flex-col gap-8">
-                    <h1 className="text-3xl font-display text-default font-medium">
+                <article className="flex min-w-0 flex-col gap-6 md:col-span-7 md:gap-8">
+                    <h1 className="font-display text-2xl font-medium text-default md:text-3xl">
                         {title}
                     </h1>
 
-                    <h2 className="pl-6 border-l font-display text-default/60 italic">
+                    <h2 className="border-l pl-6 font-display italic text-default/60">
                         {description}
                     </h2>
 
                     <div
-                        className="leading-8 text-default font-display tracking-wide"
+                        className="min-w-0 max-w-full break-words font-display leading-8 tracking-wide text-default [&_img]:h-auto [&_img]:max-w-full [&_pre]:overflow-x-auto"
                         dangerouslySetInnerHTML={{ __html: contentEn }}
                     />
 
@@ -129,7 +135,7 @@ export default async function Page({
                             )}
                         </div>
                     </div>
-                </div>
+                </article>
             </div>
         </div>
     )

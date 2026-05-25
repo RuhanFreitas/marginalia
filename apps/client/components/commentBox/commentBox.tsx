@@ -45,19 +45,19 @@ export default function CommentBox({ marginaliaId }: { marginaliaId: number }) {
     }
 
     return (
-        <div className="flex gap-4 w-full border-b border-default/10 pb-8">
-            <div className="w-8 h-8 flex font-display text-default items-center justify-center border border-default/10 text-xs">
-                {user?.name?.[0] ?? '?'}
+        <div className="flex w-full gap-3 border-b border-default/10 pb-8">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center border border-default/10 bg-default/5 font-display text-xs uppercase text-default/60">
+                {user?.name?.[0]?.toUpperCase() ?? '?'}
             </div>
 
-            <div className="flex flex-col gap-3 w-full">
+            <div className="flex w-full min-w-0 flex-col gap-3">
                 <textarea
                     value={content}
                     onChange={(e) => {
                         setContent(e.target.value)
                         if (error) setError('')
                     }}
-                    className="w-full min-h-[120px] p-4 border border-default/10 text-sm font-display text-default outline-0 resize-none"
+                    className="min-h-[120px] w-full resize-none border border-default/10 p-4 font-display text-sm text-default outline-0"
                     placeholder="Share your thoughts..."
                 />
 

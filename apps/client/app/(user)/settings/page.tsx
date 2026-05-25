@@ -108,10 +108,13 @@ export default function Page() {
     }
 
     return (
-        <div className="h-full mx-auto max-w-md">
-            <div className="py-12">
+        <div className="mx-auto h-full w-full min-w-0 max-w-md px-6 pb-12 sm:px-0">
+            <div className="py-8 md:py-12">
                 <Link href="/">
-                    <button className="flex group transition cursor-pointer hover:text-default items-center gap-3 text-sm font-medium text-default/60">
+                    <button
+                        type="button"
+                        className="group flex cursor-pointer items-center gap-3 text-sm font-medium text-default/60 transition hover:text-default"
+                    >
                         <ArrowLeftIcon
                             className="text-default/60 group-hover:scale-105 group-hover:text-default"
                             width={18}
@@ -120,90 +123,97 @@ export default function Page() {
                     </button>
                 </Link>
             </div>
-            <div>
+
+            <div className="flex min-w-0 flex-col">
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-default font-display text-3xl">
+                    <h1 className="font-display text-2xl text-default md:text-3xl">
                         Account Settings
                     </h1>
-                    <span className="text-default/60 tracking-wide text-sm">
+                    <span className="text-sm tracking-wide text-default/60">
                         Manage your account information and preferences
                     </span>
                 </div>
-                <form onSubmit={handleUpdate} className="py-8">
-                    <div className="border-b border-default/10 pb-8">
-                        <label className="text-xs text-default/60 flex items-center gap-2 mb-2">
+
+                <form onSubmit={handleUpdate} className="py-6 md:py-8">
+                    <div className="border-b border-default/10 pb-6 md:pb-8">
+                        <label className="mb-2 flex items-center gap-2 text-xs text-default/60">
                             <UserIcon width={12} /> NAME
                         </label>
                         <input
                             onChange={(e) => setName(e.target.value)}
                             type="text"
                             placeholder={currentName}
-                            className="text-default/60 font-display w-full text-sm outline-0 py-3 px-4 border border-default/10"
+                            className="w-full border border-default/10 px-4 py-3 font-display text-sm text-default outline-0 placeholder:text-default/60"
                         />
                     </div>
-                    <div className="border-b border-default/10 pt-8 pb-8">
-                        <label className="text-xs text-default/60 flex items-center gap-2 mb-2">
+
+                    <div className="border-b border-default/10 pb-6 pt-6 md:pb-8 md:pt-8">
+                        <label className="mb-2 flex items-center gap-2 text-xs text-default/60">
                             <MailIcon width={12} /> EMAIL
                         </label>
                         <input
                             onChange={(e) => setEmail(e.target.value)}
-                            type="text"
+                            type="email"
                             placeholder={currentEmail}
-                            className="text-default/60 font-display w-full text-sm outline-0 py-3 px-4 border border-default/10"
+                            className="w-full border border-default/10 px-4 py-3 font-display text-sm text-default outline-0 placeholder:text-default/60"
                         />
                     </div>
-                    <div className="border-b border-default/10 pt-8 pb-8">
-                        <label className="text-xs text-default/60 flex items-center gap-2 mb-2">
+
+                    <div className="border-b border-default/10 pb-6 pt-6 md:pb-8 md:pt-8">
+                        <label className="mb-2 flex items-center gap-2 text-xs text-default/60">
                             <LockIcon width={12} /> CHANGE PASSWORD
                         </label>
                         <input
                             onChange={(e) => setPassword(e.target.value)}
                             type="password"
                             placeholder="••••••"
-                            className="mb-4 text-default/60 font-display w-full text-sm outline-0 py-3 px-4 border border-default/10"
+                            className="mb-4 w-full border border-default/10 px-4 py-3 font-display text-sm text-default outline-0 placeholder:text-default/60"
                         />
-                        <label className="text-xs text-default/60 flex items-center gap-2 mb-2">
+                        <label className="mb-2 flex items-center gap-2 text-xs text-default/60">
                             <LockIcon width={12} /> CONFIRM PASSWORD
                         </label>
                         <input
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             type="password"
                             placeholder="••••••"
-                            className="text-default/60 font-display w-full text-sm outline-0 py-3 px-4 border border-default/10"
+                            className="w-full border border-default/10 px-4 py-3 font-display text-sm text-default outline-0 placeholder:text-default/60"
                         />
                     </div>
 
                     <FormError message={updateError} align="start" />
 
-                    <div className="pt-6">
+                    <div className="pt-4 md:pt-6">
                         <button
+                            type="submit"
                             disabled={updateLoading}
-                            className="text-default cursor-pointer hover:bg-default hover:text-default-foreground transition text-sm flex tracking-wide gap-2 items-center px-6 py-4 border border-default/10 disabled:opacity-60"
+                            className="flex w-full cursor-pointer items-center justify-center gap-2 border border-default/10 px-6 py-4 text-sm tracking-wide text-default transition hover:bg-default hover:text-default-foreground disabled:opacity-60 sm:w-auto sm:justify-start"
                         >
-                            <Upload width={12} />{' '}
+                            <Upload width={12} />
                             {updateLoading ? 'SAVING...' : 'SAVE CHANGES'}
                         </button>
                     </div>
                 </form>
+
                 <form
                     onSubmit={handleDelete}
-                    className="flex flex-col gap-2 mb-16"
+                    className="flex flex-col gap-2 border-t border-default/10 pt-8 md:mb-16"
                 >
-                    <h1 className="font-display text-default tracking-wide text-xl">
+                    <h2 className="font-display text-lg tracking-wide text-default md:text-xl">
                         Danger Zone
-                    </h1>
-                    <span className="text-default/60 tracking-wide text-sm">
+                    </h2>
+                    <span className="text-sm tracking-wide text-default/60">
                         Permanently delete your account and all associated data
                     </span>
 
                     <FormError message={deleteError} align="start" />
 
-                    <div className="pt-6">
+                    <div className="pt-4 md:pt-6">
                         <button
+                            type="submit"
                             disabled={deleteLoading}
-                            className="text-default cursor-pointer hover:bg-default hover:text-default-foreground text-sm flex tracking-wide gap-2 items-center px-6 py-4 border border-default/10 disabled:opacity-60"
+                            className="flex w-full cursor-pointer items-center justify-center gap-2 border border-default/10 px-6 py-4 text-sm tracking-wide text-default transition hover:bg-default hover:text-default-foreground disabled:opacity-60 sm:w-auto sm:justify-start"
                         >
-                            <Trash2Icon width={12} />{' '}
+                            <Trash2Icon width={12} />
                             {deleteLoading ? 'DELETING...' : 'DELETE ACCOUNT'}
                         </button>
                     </div>

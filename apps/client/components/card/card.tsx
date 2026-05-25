@@ -10,36 +10,36 @@ export default function Card({
     createdAt,
 }: CardProps) {
     return (
-        <div className="group grid grid-cols-5 border-t border-foreground/10">
+        <div className="group grid grid-cols-1 border-t border-foreground/10 md:grid-cols-5 md:items-stretch">
             <div
-                className={`${order % 2 === 0 ? 'order-2' : ''}  overflow-hidden col-span-2`}
+                className={`relative h-[280px] overflow-hidden md:col-span-2 md:h-full md:min-h-[380px] ${order % 2 === 0 ? 'md:order-2' : ''}`}
             >
                 <Image
-                    className="grayscale group-hover:grayscale-0 group-hover:scale-110 transition duration-500 w-full h-[380] object-cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    className="object-cover grayscale transition duration-500 group-hover:scale-110 group-hover:grayscale-0"
                     src={cover}
-                    width={200}
-                    height={200}
                     alt="Picture"
                 />
             </div>
             <div
-                className={`${order % 2 === 0 ? 'order-1' : ''} min-w-0 col-span-3 gap-8 flex flex-col justify-center items-center px-12`}
+                className={`flex min-w-0 w-full flex-col items-stretch justify-center gap-6 px-6 py-8 md:col-span-3 md:gap-8 md:px-12 md:py-12 ${order % 2 === 0 ? 'md:order-1' : ''}`}
             >
-                <div className="flex flex-col gap-8">
-                    <span className="font-display text-8xl font-bold text-default/10">
+                <div className="flex w-full flex-col gap-6 md:gap-8">
+                    <span className="font-display text-5xl font-bold text-default/10 md:text-8xl">
                         {String(order).padStart(2, '0')}
                     </span>
-                    <h1 className="font-display text-3xl font-semibold text-default tracking-wide">
+                    <h1 className="font-display text-xl font-semibold tracking-wide text-default md:text-3xl">
                         {title}
                     </h1>
-                    <p className="font-display tracking-wide text-xs font-medium italic text-default/60">
+                    <p className="font-display text-xs font-medium italic tracking-wide text-default/60">
                         There is something vertiginous about the idea that we
                         never chose to be here — that existence precedes any
                         possible consent to it.
                     </p>
                 </div>
-                <span className="border-t border-foreground/10 w-full"></span>
-                <div className="flex justify-between w-full">
+                <span className="w-full border-t border-foreground/10"></span>
+                <div className="flex w-full justify-between">
                     <div className="flex flex-col">
                         <span className="text-xs text-default font-medium">
                             {book}

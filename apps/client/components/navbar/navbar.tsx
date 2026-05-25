@@ -3,60 +3,146 @@
 import Link from 'next/link'
 import Toggle from '../toggle/toggle'
 import { useAuth } from '@/context/AuthContext'
-import { UserIcon } from 'lucide-react'
+import { MenuIcon, UserIcon, XIcon } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function Navbar() {
     const { user, logout } = useAuth()
+    const [menuOpen, setMenuOpen] = useState(false)
+    const menuRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (!menuOpen) return
+
+        function handleClickOutside(event: MouseEvent) {
+            if (
+                menuRef.current &&
+                !menuRef.current.contains(event.target as Node)
+            ) {
+                setMenuOpen(false)
+            }
+        }
+
+        function handleEscape(event: KeyboardEvent) {
+            if (event.key === 'Escape') setMenuOpen(false)
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        document.addEventListener('keydown', handleEscape)
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+            document.removeEventListener('keydown', handleEscape)
+        }
+    }, [menuOpen])
+
+    function handleLogout() {
+        setMenuOpen(false)
+        logout()
+    }
 
     return (
         <nav className="sticky top-0 z-100 bg-background border-b border-foreground/10">
-            <div className="mx-auto max-w-5xl py-6 flex justify-between items-center px-8 sm:px-0">
-                <div className="flex gap-4 items-center">
-                    <Link href="/">
-                        <span className="font-display text-2xl font-semibold tracking-wide text-default">
+            <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4 sm:px-0 md:py-6">
+                <div className="flex min-w-0 items-center gap-4">
+                    <Link href="/" className="shrink-0">
+                        <span className="font-display text-xl font-semibold tracking-wide text-default md:text-2xl">
                             Marginalia
                         </span>
                     </Link>
-                    <span className="text-default/60 hidden text-xs font-semibold tracking-widest sm:inline">
+                    <span className="hidden text-xs font-semibold tracking-widest text-default/60 sm:inline">
                         A READER'S NOTES
                     </span>
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex shrink-0 items-center gap-2 sm:gap-4">
                     {user ? (
-                        user && (
-                            <>
+                        <>
+                            <div
+                                ref={menuRef}
+                                className="relative sm:hidden"
+                            >
+                                <button
+                                    type="button"
+                                    onClick={() => setMenuOpen((open) => !open)}
+                                    aria-expanded={menuOpen}
+                                    aria-label={
+                                        menuOpen
+                                            ? 'Close menu'
+                                            : 'Open account menu'
+                                    }
+                                    className="flex h-9 w-9 cursor-pointer items-center justify-center border border-foreground/10 text-default transition hover:bg-foreground hover:text-default-foreground"
+                                >
+                                    {menuOpen ? (
+                                        <XIcon width={16} />
+                                    ) : (
+                                        <MenuIcon width={16} />
+                                    )}
+                                </button>
+
+                                {menuOpen && (
+                                    <div className="absolute right-0 top-full z-50 mt-2 flex min-w-[10rem] flex-col border border-default/10 bg-background shadow-sm">
+                                        <Link
+                                            href="/settings"
+                                            onClick={() => setMenuOpen(false)}
+                                            className="flex cursor-pointer items-center gap-2 border-b border-default/10 px-4 py-3 text-xs text-default transition hover:bg-foreground hover:text-default-foreground"
+                                        >
+                                            <UserIcon width={12} />
+                                            Profile
+                                        </Link>
+                                        <button
+                                            type="button"
+                                            onClick={handleLogout}
+                                            className="cursor-pointer px-4 py-3 text-left text-xs text-default transition hover:bg-foreground hover:text-default-foreground"
+                                        >
+                                            Log out
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="hidden items-center gap-4 sm:flex">
                                 <Link href="/settings">
-                                    <button className="flex cursor-pointer transition items-center gap-2 justify-center text-default text-xs font-display hover:text-default-foreground hover:bg-foreground border border-foreground/10 px-4 py-2">
-                                        <UserIcon width={12} />{' '}
+                                    <button
+                                        type="button"
+                                        className="flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 border border-foreground/10 px-4 font-display text-xs text-default transition hover:bg-foreground hover:text-default-foreground"
+                                    >
+                                        <UserIcon width={12} />
                                         {user.name.split(' ')[0]}
                                     </button>
                                 </Link>
                                 <button
+                                    type="button"
                                     onClick={logout}
-                                    className="flex cursor-pointer transition items-center bg-foreground text-default-foreground hover:bg-default-foreground hover:text-default gap-2 text-xs border border-default/10 px-4 py-2"
+                                    className="flex h-9 shrink-0 cursor-pointer items-center gap-2 border border-default/10 bg-foreground px-4 text-xs text-default-foreground transition hover:bg-default-foreground hover:text-default"
                                 >
                                     Log out
                                 </button>
-                            </>
-                        )
+                            </div>
+                        </>
                     ) : (
                         <>
                             <Link href="/login">
-                                <button className="flex cursor-pointer transition items-center hover:bg-foreground hover:text-default-foreground gap-2 text-default text-xs border border-default/10 px-4 py-2">
+                                <button
+                                    type="button"
+                                    className="flex h-9 shrink-0 cursor-pointer items-center gap-2 border border-default/10 px-3 text-xs text-default transition hover:bg-foreground hover:text-default-foreground sm:px-4"
+                                >
                                     Log In
                                 </button>
                             </Link>
 
                             <Link href="/register">
-                                <button className="flex cursor-pointer transition items-center gap-2 border border-transparent hover:border-default/10 hover:bg-default-foreground hover:text-default bg-foreground text-default-foreground text-xs px-4 py-2">
+                                <button
+                                    type="button"
+                                    className="flex h-9 shrink-0 cursor-pointer items-center gap-2 border border-transparent bg-foreground px-3 text-xs text-default-foreground transition hover:border-default/10 hover:bg-default-foreground hover:text-default sm:px-4"
+                                >
                                     Sign Up
                                 </button>
                             </Link>
                         </>
                     )}
 
-                    <span className="border-l border-default/10"></span>
+                    <span className="hidden border-l border-default/10 sm:block"></span>
 
                     <Toggle />
                 </div>
