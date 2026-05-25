@@ -47,3 +47,21 @@ export function validateComment(content: string): string | null {
     if (!content.trim()) return 'Please, enter a comment'
     return null
 }
+
+export function isMarginaliaFormComplete(
+    values: Record<string, string>,
+): boolean {
+    return Object.values(values).every((value) => value.trim().length > 0)
+}
+
+export function validateMarginaliaForm(
+    values: Record<string, string>,
+): string | null {
+    if (!values.title?.trim()) return 'Please, enter a marginalia title'
+    if (!values.book?.trim()) return 'Please, enter a book title'
+    if (!values.author?.trim()) return 'Please, enter an author'
+    if (!values.description?.trim()) return 'Please, enter an excerpt'
+    if (!values.cover?.trim()) return 'Please, enter a book cover URL'
+    if (!values.contentEn?.trim()) return 'Please, enter the content'
+    return null
+}

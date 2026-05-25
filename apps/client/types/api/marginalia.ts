@@ -13,3 +13,12 @@ export type Marginalia = {
     updatedAt: string
     comments: Comment[]
 }
+
+export type CreateMarginaliaBody = {
+    title: string
+    book: string
+    author: string
+    description: string
+    cover: string
+    contentEn: string
+}

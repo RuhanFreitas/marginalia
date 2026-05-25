@@ -1,3 +1,4 @@
+import HomeShell from '@/components/homeShell/homeShell'
 import List from '@/components/list/list'
 import PageError from '@/components/pageError/pageError'
 import Search from '@/components/search/search'
@@ -24,16 +25,20 @@ export default async function Page() {
 
     if (!marginalias.length) {
         return (
-            <div className="h-screen flex justify-center items-center font-display text-default/60">
-                <p>No marginalias found...</p>
-            </div>
+            <HomeShell>
+                <div className="h-screen flex justify-center items-center font-display text-default/60">
+                    <p>No marginalias found...</p>
+                </div>
+            </HomeShell>
         )
     }
 
     return (
         <SearchProvider marginalias={marginalias}>
-            <Search />
-            <List />
+            <HomeShell>
+                <Search />
+                <List />
+            </HomeShell>
         </SearchProvider>
     )
 }
