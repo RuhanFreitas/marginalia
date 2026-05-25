@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/navbar/navbar'
 import Footer from '@/components/footer/footer'
+import ThemeScript from '@/components/themeScript/themeScript'
 import { AuthProvider } from '@/context/AuthContext'
 
 const inter = Inter({
@@ -28,8 +29,12 @@ export default function RootLayout({
     return (
         <html
             lang="en"
-            className={`${inter.className} ${inter.variable} ${baskerville.variable} light`}
+            suppressHydrationWarning
+            className={`${inter.className} ${inter.variable} ${baskerville.variable}`}
         >
+            <head>
+                <ThemeScript />
+            </head>
             <body className="bg-background h-full">
                 <AuthProvider>
                     <Navbar />
