@@ -51,17 +51,47 @@ export function validateComment(content: string): string | null {
 export function isMarginaliaFormComplete(
     values: Record<string, string>,
 ): boolean {
-    return Object.values(values).every((value) => value.trim().length > 0)
+    const requiredFields = [
+        'title',
+        'book',
+        'author',
+        'description',
+        'contentEn',
+    ] as const
+
+    const allTextFilled = requiredFields.every(
+        (field) => values[field]?.trim().length > 0,
+    )
+
+    return allTextFilled && isMarginaliaCoverUrlValid(values.cover ?? '')
+}
+
+export function isMarginaliaCoverUrlValid(cover: string): boolean {
+    return cover.trim().length > 0 && isValidUrl(cover.trim())
+}
+
+function isValidUrl(value: string): boolean {
+    try {
+        const url = new URL(value)
+        return url.protocol === 'http:' || url.protocol === 'https:'
+    } catch {
+        return false
+    }
 }
 
 export function validateMarginaliaForm(
     values: Record<string, string>,
 ): string | null {
-    if (!values.title?.trim()) return 'Please, enter a marginalia title'
-    if (!values.book?.trim()) return 'Please, enter a book title'
-    if (!values.author?.trim()) return 'Please, enter an author'
-    if (!values.description?.trim()) return 'Please, enter an excerpt'
-    if (!values.cover?.trim()) return 'Please, enter a book cover URL'
-    if (!values.contentEn?.trim()) return 'Please, enter the content'
+    if (!values.title?.trim()) return 'Please, enter a valid title'
+    if (!values.book?.trim()) return 'Please, enter a valid book title'
+    if (!values.author?.trim()) return 'Please, enter a valid author name'
+    if (!values.description?.trim()) return 'Please, enter a valid description'
+    if (!values.cover?.trim()) return 'Please, enter a valid cover format'
+    if (!isValidUrl(values.cover.trim())) {
+        return 'Please, enter a valid cover URL (http or https)'
+    }
+    if (!values.contentEn?.trim()) {
+        return 'Please, enter a valid content format in english'
+    }
     return null
 }

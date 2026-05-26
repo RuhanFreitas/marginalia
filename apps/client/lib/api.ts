@@ -13,9 +13,19 @@ export function parseApiErrorMessage(
     fallback: string,
 ): string {
     const { message } = data
-    if (Array.isArray(message)) return message[0] ?? fallback
+    if (Array.isArray(message)) {
+        const joined = message.filter(Boolean).join('. ')
+        return joined || fallback
+    }
     if (typeof message === 'string' && message) return message
     return fallback
+}
+
+export function getAuthHeaders(token: string): HeadersInit {
+    return {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+    }
 }
 
 export async function parseApiError(

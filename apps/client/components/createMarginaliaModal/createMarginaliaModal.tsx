@@ -1,13 +1,8 @@
 'use client'
 
 import FormError from '@/components/formError/formError'
-import { getErrorMessage } from '@/lib/api'
-import { createMarginalia } from '@/lib/marginalia'
-import {
-    isMarginaliaFormComplete,
-    validateMarginaliaForm,
-} from '@/lib/validation'
-import type { CreateMarginaliaBody } from '@/types/api/marginalia'
+import { useCreateMarginalia } from '@/hooks/useCreateMarginalia'
+import { isMarginaliaFormComplete } from '@/lib/validation'
 import {
     EMPTY_MARGINALIA_FORM,
     type MarginaliaFormValues,
@@ -30,7 +25,6 @@ import {
     X,
 } from 'lucide-react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { FormEvent, useEffect, useState } from 'react'
 
 type CreateMarginaliaModalProps = {
@@ -70,12 +64,14 @@ export default function CreateMarginaliaModal({
     open,
     onClose,
 }: CreateMarginaliaModalProps) {
-    const router = useRouter()
-
     const [form, setForm] = useState<MarginaliaFormValues>(EMPTY_MARGINALIA_FORM)
-    const [error, setError] = useState('')
-    const [loading, setLoading] = useState(false)
     const [coverPreviewError, setCoverPreviewError] = useState(false)
+
+    const { publish, loading, error, clearError } = useCreateMarginalia(() => {
+        setForm(EMPTY_MARGINALIA_FORM)
+        setCoverPreviewError(false)
+        onClose()
+    })
 
     const isComplete = isMarginaliaFormComplete(form)
 
@@ -104,53 +100,19 @@ export default function CreateMarginaliaModal({
         value: MarginaliaFormValues[K],
     ) {
         setForm((prev) => ({ ...prev, [field]: value }))
-        if (error) setError('')
+        if (error) clearError()
     }
 
     function handleClose() {
         setForm(EMPTY_MARGINALIA_FORM)
-        setError('')
+        clearError()
         setCoverPreviewError(false)
         onClose()
     }
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
-
-        const validationError = validateMarginaliaForm(form)
-        if (validationError) {
-            setError(validationError)
-            return
-        }
-
-        setError('')
-        setLoading(true)
-
-        try {
-            const token = localStorage.getItem('token')
-
-            if (!token) {
-                throw new Error('Session expired. Please sign in again')
-            }
-
-            const body: CreateMarginaliaBody = {
-                title: form.title.trim(),
-                book: form.book.trim(),
-                author: form.author.trim(),
-                description: form.description.trim(),
-                cover: form.cover.trim(),
-                contentEn: form.contentEn.trim(),
-            }
-
-            await createMarginalia(body, token)
-
-            handleClose()
-            router.refresh()
-        } catch (err: unknown) {
-            setError(getErrorMessage(err, 'Failed to publish marginalia'))
-        } finally {
-            setLoading(false)
-        }
+        await publish(form)
     }
 
     if (!open) return null

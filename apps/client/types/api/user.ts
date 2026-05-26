@@ -1,8 +1,10 @@
+export type UserRole = 'ADMIN' | 'USER'
+
 export type User = {
     id: number
     name: string
     email: string
-    role: string
+    role: UserRole
 }
 
 export type UpdateUserBody = {
