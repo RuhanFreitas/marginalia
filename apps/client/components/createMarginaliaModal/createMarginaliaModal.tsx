@@ -25,7 +25,7 @@ import {
     X,
 } from 'lucide-react'
 import Image from 'next/image'
-import React, { FormEvent, useEffect, useState }from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 
 type CreateMarginaliaModalProps = {
     open: boolean
@@ -77,33 +77,6 @@ export default function CreateMarginaliaModal({
     })
 
     const isComplete = isMarginaliaFormComplete(form)
-
-    function applyFormatting(before: string, after: string = '') {
-        if (!textareaRef.current) return
-
-        const textarea = textareaRef.current
-        const start = textarea.selectionStart
-        const end = textarea.selectionEnd
-        const text = form.contentEn
-        const selectedText = text.substring(start, end)
-
-        if (!selectedText) return
-
-        const newText =
-            text.substring(0, start) +
-            before +
-            selectedText +
-            after +
-            text.substring(end)
-
-        updateField('contentEn', newText)
-
-        setTimeout(() => {
-            textarea.focus()
-            textarea.selectionStart = start + before.length
-            textarea.selectionEnd = start + before.length + selectedText.length
-        }, 0)
-    }
 
     function insertMarkdown(prefix: string, suffix?: string) {
         if (!textareaRef.current) return
@@ -180,7 +153,10 @@ export default function CreateMarginaliaModal({
     }, [open, onClose])
 
     useEffect(() => {
-        setCoverPreviewError(false)
+        const timer = setTimeout(() => {
+            setCoverPreviewError(false)
+        }, 0)
+        return () => clearTimeout(timer)
     }, [form.cover])
 
     function updateField<K extends keyof MarginaliaFormValues>(
@@ -328,7 +304,9 @@ export default function CreateMarginaliaModal({
                                         type="button"
                                         className={toolbarButtonClassName}
                                         aria-label="Bold"
-                                        onClick={() => insertMarkdown('**', '**')}
+                                        onClick={() =>
+                                            insertMarkdown('**', '**')
+                                        }
                                     >
                                         <Bold width={14} height={14} />
                                     </button>
@@ -344,7 +322,9 @@ export default function CreateMarginaliaModal({
                                         type="button"
                                         className={toolbarButtonClassName}
                                         aria-label="Underline"
-                                        onClick={() => insertMarkdown('<u>', '</u>')}
+                                        onClick={() =>
+                                            insertMarkdown('<u>', '</u>')
+                                        }
                                     >
                                         <Underline width={14} height={14} />
                                     </button>
@@ -352,7 +332,9 @@ export default function CreateMarginaliaModal({
                                         type="button"
                                         className={toolbarButtonClassName}
                                         aria-label="Strikethrough"
-                                        onClick={() => insertMarkdown('~~', '~~')}
+                                        onClick={() =>
+                                            insertMarkdown('~~', '~~')
+                                        }
                                     >
                                         <Strikethrough width={14} height={14} />
                                     </button>
@@ -361,7 +343,9 @@ export default function CreateMarginaliaModal({
                                         type="button"
                                         className={toolbarButtonClassName}
                                         aria-label="Ordered list"
-                                        onClick={() => insertBlockMarkdown('1. ')}
+                                        onClick={() =>
+                                            insertBlockMarkdown('1. ')
+                                        }
                                     >
                                         <ListOrdered width={14} height={14} />
                                     </button>
@@ -369,7 +353,9 @@ export default function CreateMarginaliaModal({
                                         type="button"
                                         className={toolbarButtonClassName}
                                         aria-label="Bullet list"
-                                        onClick={() => insertBlockMarkdown('- ')}
+                                        onClick={() =>
+                                            insertBlockMarkdown('- ')
+                                        }
                                     >
                                         <List width={14} height={14} />
                                     </button>
@@ -377,7 +363,9 @@ export default function CreateMarginaliaModal({
                                         type="button"
                                         className={toolbarButtonClassName}
                                         aria-label="Quote"
-                                        onClick={() => insertBlockMarkdown('> ')}
+                                        onClick={() =>
+                                            insertBlockMarkdown('> ')
+                                        }
                                     >
                                         <Quote width={14} height={14} />
                                     </button>
@@ -402,7 +390,9 @@ export default function CreateMarginaliaModal({
                                         type="button"
                                         className={toolbarButtonClassName}
                                         aria-label="Link"
-                                        onClick={() => insertMarkdown('[', '](url)')}
+                                        onClick={() =>
+                                            insertMarkdown('[', '](url)')
+                                        }
                                     >
                                         <Link width={14} height={14} />
                                     </button>
@@ -410,7 +400,9 @@ export default function CreateMarginaliaModal({
                                         type="button"
                                         className={toolbarButtonClassName}
                                         aria-label="Image"
-                                        onClick={() => insertMarkdown('![', '](url)')}
+                                        onClick={() =>
+                                            insertMarkdown('![', '](url)')
+                                        }
                                     >
                                         <ImageIcon width={14} height={14} />
                                     </button>

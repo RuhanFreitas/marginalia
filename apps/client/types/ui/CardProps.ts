@@ -4,5 +4,6 @@ export type CardProps = {
     author: string
     cover: string
     title: string
+    description: string
     createdAt: string
 }

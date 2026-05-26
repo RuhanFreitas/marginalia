@@ -7,6 +7,7 @@ export default function Card({
     author,
     cover,
     title,
+    description,
     createdAt,
 }: CardProps) {
     return (
@@ -33,9 +34,7 @@ export default function Card({
                         {title}
                     </h1>
                     <p className="font-display text-xs font-medium italic tracking-wide text-default/60">
-                        There is something vertiginous about the idea that we
-                        never chose to be here — that existence precedes any
-                        possible consent to it.
+                        {description}
                     </p>
                 </div>
                 <span className="w-full border-t border-foreground/10"></span>

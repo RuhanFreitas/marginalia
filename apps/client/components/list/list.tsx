@@ -18,6 +18,7 @@ export default function List() {
                         book={marginalia.book}
                         author={marginalia.author}
                         title={marginalia.title}
+                        description={marginalia.description}
                         createdAt={marginalia.createdAt}
                     />
                 </Link>
