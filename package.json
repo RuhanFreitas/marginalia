@@ -1,25 +1,23 @@
 {
-  "name": "marginalia",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "scripts": {
-    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:server\"",
-    "dev:frontend": "npm run dev --workspace frontend",
-    "dev:server": "npm run start:dev --workspace server",
-    "build": "npm run build --workspaces",
-    "lint": "npm run lint --workspaces",
-    "test": "npm run test --workspace server"
-  },
-  "devDependencies": {
-    "@types/jest": "^30.0.0",
-    "@types/node": "^25.9.1",
-    "concurrently": "^9.0.0",
-    "typescript": "^6.0.3"
-  },
-  "dependencies": {
-    "lucide-react": "^1.16.0"
-  }
+    "name": "marginalia",
+    "private": true,
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:server\"",
+        "dev:frontend": "npm run dev --workspace frontend",
+        "dev:server": "npm run start:dev --workspace server",
+        "build": "npm run build --workspaces",
+        "lint": "npm run lint --workspaces",
+        "test": "npm run test --workspace server"
+    },
+    "devDependencies": {
+        "@types/jest": "^30.0.0",
+        "@types/node": "^25.9.1",
+        "concurrently": "^9.0.0",
+        "typescript": "^6.0.3"
+    },
+    "dependencies": {}
 }

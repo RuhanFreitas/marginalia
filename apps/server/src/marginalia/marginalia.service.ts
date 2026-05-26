@@ -3,13 +3,21 @@ import { CreateMarginaliaDTO } from './dto/create-marginalia.dto'
 import { MarginaliaRepository } from './marginalia.repository'
 import { UpdateMarginaliaDTO } from './dto/update-marginalia.dto'
 import { buildCommentTree } from '../helpers/build-comment-tree'
+import { markdownToHtml } from '../helpers/markdown-to-html'
 
 @Injectable()
 export class MarginaliaService {
     constructor(private readonly marginaliaRepository: MarginaliaRepository) {}
 
     async create(createMarginaliaDTO: CreateMarginaliaDTO, id: number) {
-        return await this.marginaliaRepository.create(createMarginaliaDTO, id)
+        const marginalia = await this.marginaliaRepository.create(
+            {
+                ...createMarginaliaDTO,
+                contentEn: markdownToHtml(createMarginaliaDTO.contentEn),
+            },
+            id,
+        )
+        return marginalia
     }
 
     async findAll() {
@@ -31,7 +39,12 @@ export class MarginaliaService {
 
     async updateById(updateMarginaliaDTO: UpdateMarginaliaDTO, id: number) {
         return await this.marginaliaRepository.updateById(
-            updateMarginaliaDTO,
+            {
+                ...updateMarginaliaDTO,
+                contentEn: updateMarginaliaDTO.contentEn
+                    ? markdownToHtml(updateMarginaliaDTO.contentEn)
+                    : undefined,
+            },
             id,
         )
     }
