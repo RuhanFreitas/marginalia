@@ -5,13 +5,15 @@ import {
     PrismaExceptionFilter,
     PrismaValidationExceptionFilter,
 } from './helpers/prisma-exception.filter'
+import cookieParser from 'cookie-parser'
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule)
 
+    app.use(cookieParser())
+
     app.useGlobalPipes(new ValidationPipe())
 
-    // Registrar exception filters globais
     app.useGlobalFilters(
         new PrismaExceptionFilter(),
         new PrismaValidationExceptionFilter(),
