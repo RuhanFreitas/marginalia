@@ -1,15 +1,11 @@
-import {
-    BadRequestException,
-    ConflictException,
-    Injectable,
-    NotFoundException,
-} from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 
-import { Prisma, User } from '../generated/prisma/client'
+import { User } from '../generated/prisma/client'
 
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateUserDTO } from './dto/create-user.dto'
 import { UpdateUserDTO } from './dto/update-user.dto'
+import { handlePrismaError } from '../helpers/prisma-error.helper'
 
 @Injectable()
 export class UserRepository {
@@ -25,15 +21,7 @@ export class UserRepository {
                 },
             })
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                if (error.code === 'P2002') {
-                    throw new ConflictException('Email already exists')
-                }
-
-                throw new BadRequestException('Failed to create user')
-            }
-
-            throw error
+            handlePrismaError(error, 'Failed to create user')
         }
     }
 
@@ -56,19 +44,7 @@ export class UserRepository {
                 },
             })
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                if (error.code === 'P2025') {
-                    throw new NotFoundException('User not found')
-                }
-
-                if (error.code === 'P2002') {
-                    throw new ConflictException('Email already exists')
-                }
-
-                throw new BadRequestException('Failed to update user')
-            }
-
-            throw error
+            handlePrismaError(error, 'Failed to update user')
         }
     }
 
@@ -84,15 +60,7 @@ export class UserRepository {
                 where: { id },
             })
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                if (error.code === 'P2025') {
-                    throw new NotFoundException('User not found')
-                }
-
-                throw new BadRequestException('Failed to delete user')
-            }
-
-            throw error
+            handlePrismaError(error, 'Failed to delete user')
         }
     }
 }

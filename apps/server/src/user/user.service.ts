@@ -10,35 +10,30 @@ export class UserService {
     constructor(private readonly userRepository: UserRepository) {}
 
     async findMyself(id: number): Promise<ResponseUserDTO> {
-        const res = await this.userRepository.findById(id)
+        const user = await this.userRepository.findById(id)
 
-        if (!res) {
+        if (!user) {
             throw new NotFoundException('User not found')
         }
 
-        return new ResponseUserDTO(res)
+        return new ResponseUserDTO(user)
     }
 
     async updateMyself(
         id: number,
         updateUserDTO: UpdateUserDTO,
     ): Promise<ResponseUserDTO> {
-        const res = await this.userRepository.updateById(id, updateUserDTO)
-
-        if (!res) {
-            throw new NotFoundException('User not found')
-        }
-
-        return new ResponseUserDTO(res)
+        const user = await this.userRepository.updateById(id, updateUserDTO)
+        return new ResponseUserDTO(user)
     }
 
     async delete(id: number): Promise<ResponseUserDTO> {
-        const res = await this.userRepository.delete(id)
+        const user = await this.userRepository.delete(id)
 
-        if (!res) {
+        if (!user) {
             throw new NotFoundException('User not found')
         }
 
-        return new ResponseUserDTO(res)
+        return new ResponseUserDTO(user)
     }
 }

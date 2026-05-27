@@ -1,14 +1,11 @@
-import {
-    BadRequestException,
-    Injectable,
-    NotFoundException,
-} from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 
-import { Comment, Prisma } from '../generated/prisma/client'
+import { Comment } from '../generated/prisma/client'
 
 import { CreateCommentDTO } from './dto/create-comment.dto'
 import { PrismaService } from '../prisma/prisma.service'
 import { UpdateCommentDTO } from './dto/update-comment.dto'
+import { handlePrismaError } from '../helpers/prisma-error.helper'
 
 @Injectable()
 export class CommentRepository {
@@ -57,21 +54,7 @@ export class CommentRepository {
                 },
             })
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                if (error.code === 'P2003') {
-                    throw new BadRequestException(
-                        'Invalid marginalia id, user id, or parent comment id',
-                    )
-                }
-
-                if (error.code === 'P2025') {
-                    throw new NotFoundException('Related record not found')
-                }
-
-                throw new BadRequestException('Failed to create comment')
-            }
-
-            throw error
+            handlePrismaError(error, 'Failed to create comment')
         }
     }
 
@@ -88,15 +71,7 @@ export class CommentRepository {
                 where: { id, userId },
             })
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                if (error.code === 'P2025') {
-                    throw new NotFoundException('Comment not found')
-                }
-
-                throw new BadRequestException('Failed to update comment')
-            }
-
-            throw error
+            handlePrismaError(error, 'Failed to update comment')
         }
     }
 
@@ -106,15 +81,7 @@ export class CommentRepository {
                 where: { id, userId },
             })
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                if (error.code === 'P2025') {
-                    throw new NotFoundException('Comment not found')
-                }
-
-                throw new BadRequestException('Failed to delete comment')
-            }
-
-            throw error
+            handlePrismaError(error, 'Failed to delete comment')
         }
     }
 }

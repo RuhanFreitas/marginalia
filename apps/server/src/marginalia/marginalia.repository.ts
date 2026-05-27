@@ -1,15 +1,12 @@
-import {
-    BadRequestException,
-    Injectable,
-    NotFoundException,
-} from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 
-import { Marginalia, Prisma } from '../generated/prisma/client'
+import { Marginalia } from '../generated/prisma/client'
 
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateMarginaliaDTO } from './dto/create-marginalia.dto'
 import { UpdateMarginaliaDTO } from './dto/update-marginalia.dto'
 import { MarginaliaWithComments } from '../types/marginalia'
+import { handlePrismaError } from '../helpers/prisma-error.helper'
 
 @Injectable()
 export class MarginaliaRepository {
@@ -39,16 +36,7 @@ export class MarginaliaRepository {
                 },
             })
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                if (error.code === 'P2003') {
-                    throw new BadRequestException('Invalid user id')
-                }
-
-                console.log(error.message)
-                throw new BadRequestException('Failed to create marginalia')
-            }
-
-            throw error
+            handlePrismaError(error, 'Failed to create marginalia')
         }
     }
 
@@ -88,15 +76,7 @@ export class MarginaliaRepository {
                 },
             })
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                if (error.code === 'P2025') {
-                    throw new NotFoundException('Marginalia not found')
-                }
-
-                throw new BadRequestException('Failed to update marginalia')
-            }
-
-            throw error
+            handlePrismaError(error, 'Failed to update marginalia')
         }
     }
 
@@ -106,16 +86,7 @@ export class MarginaliaRepository {
                 where: { id },
             })
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                // Record not found
-                if (error.code === 'P2025') {
-                    throw new NotFoundException('Marginalia not found')
-                }
-
-                throw new BadRequestException('Failed to delete marginalia')
-            }
-
-            throw error
+            handlePrismaError(error, 'Failed to delete marginalia')
         }
     }
 }

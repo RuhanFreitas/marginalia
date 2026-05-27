@@ -25,15 +25,15 @@ export class MarginaliaService {
     }
 
     async findById(id: number) {
-        const res = await this.marginaliaRepository.findById(id)
+        const marginalia = await this.marginaliaRepository.findById(id)
 
-        if (!res) {
+        if (!marginalia) {
             throw new NotFoundException('Marginalia not found')
         }
 
         return {
-            ...res,
-            comments: buildCommentTree(res.comments),
+            ...marginalia,
+            comments: buildCommentTree(marginalia.comments),
         }
     }
 
@@ -50,8 +50,7 @@ export class MarginaliaService {
     }
 
     async delete(id: number) {
-        const res = await this.marginaliaRepository.delete(id)
-
-        return res
+        const marginalia = await this.marginaliaRepository.delete(id)
+        return marginalia
     }
 }
