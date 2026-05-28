@@ -1,19 +1,48 @@
 'use client'
 
 import type { User } from '@/types/api/user'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
+import { getCurrentUser } from '@/lib/auth'
 
 type AuthContextType = {
     user: User | null
     setUser: (u: User | null) => void
     login: (user: User) => void
     logout: () => void
+    loading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        async function checkSession() {
+            try {
+                const currentUser = await getCurrentUser()
+                setUser(currentUser)
+            } catch {
+                setUser(null)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        checkSession()
+    }, [])
+
+    useEffect(() => {
+        function handleAuthExpired() {
+            setUser(null)
+        }
+
+        window.addEventListener('auth-expired', handleAuthExpired)
+        return () => {
+            window.removeEventListener('auth-expired', handleAuthExpired)
+        }
+    }, [])
 
     function login(user: User) {
         setUser(user)
@@ -24,7 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <AuthContext.Provider value={{ user, setUser, login, logout }}>
+        <AuthContext.Provider value={{ user, setUser, login, logout, loading }}>
             {children}
         </AuthContext.Provider>
     )

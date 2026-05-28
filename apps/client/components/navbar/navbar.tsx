@@ -119,7 +119,7 @@ export default function Navbar() {
                                 </Link>
                                 <button
                                     type="button"
-                                    onClick={logout}
+                                    onClick={handleLogout}
                                     className="flex h-9 shrink-0 cursor-pointer items-center gap-2 border border-default/10 bg-foreground px-4 text-xs text-default-foreground transition hover:bg-default-foreground hover:text-default"
                                 >
                                     Log out

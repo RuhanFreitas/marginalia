@@ -1,6 +1,21 @@
 import { handleJsonResponse, parseApiError } from '@/lib/api'
 import { API_BASE_URL } from '@/lib/config'
 import type { AuthResponse, LoginBody, RegisterBody } from '@/types/api/auth'
+import type { User } from '@/types/api/user'
+
+export async function getCurrentUser(): Promise<User | null> {
+    try {
+        const res = await fetch(`${API_BASE_URL}/user`, {
+            credentials: 'include',
+        })
+
+        if (!res.ok) return null
+
+        return (await res.json()) as User
+    } catch {
+        return null
+    }
+}
 
 export async function login(body: LoginBody): Promise<AuthResponse> {
     const res = await fetch(`${API_BASE_URL}/auth/login`, {

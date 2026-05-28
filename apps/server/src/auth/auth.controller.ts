@@ -5,7 +5,9 @@ import {
     HttpStatus,
     Post,
     Res,
+    UseGuards,
 } from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
 import { AuthService } from './auth.service'
 import { LoginDTO } from './dto/login.dto'
 import { RegisterDTO } from './dto/register.dto'
@@ -47,5 +49,19 @@ export class AuthController {
         })
 
         return res.json(data)
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Post('logout')
+    async logout(@Res() res: Response) {
+        // Clear cookie unconditionally so logout works even if token is invalid/expired
+        res.cookie('token', '', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 0,
+            path: '/',
+        })
+        return res.json({ message: 'Logged out successfully' })
     }
 }

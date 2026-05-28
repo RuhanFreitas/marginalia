@@ -37,6 +37,16 @@ export async function handleJsonResponse<T>(
     res: Response,
     fallback: string,
 ): Promise<T> {
+    if (res.status === 401) {
+        // Session expired or unauthorized - clear context on client
+        if (typeof window !== 'undefined') {
+            window.dispatchEvent(
+                new CustomEvent('auth-expired', { detail: { code: 401 } }),
+            )
+        }
+        throw new Error('Session expired. Please login again.')
+    }
+
     if (!res.ok) {
         throw new Error(await parseApiError(res, fallback))
     }

@@ -20,6 +20,15 @@ export async function postComment(body: CreateCommentBody): Promise<void> {
         body: JSON.stringify(body),
     })
 
+    if (res.status === 401) {
+        if (typeof window !== 'undefined') {
+            window.dispatchEvent(
+                new CustomEvent('auth-expired', { detail: { code: 401 } }),
+            )
+        }
+        throw new Error('Session expired. Please login again.')
+    }
+
     if (!res.ok) {
         throw new Error(await parseApiError(res, 'Failed to post comment'))
     }
@@ -34,6 +43,15 @@ export async function replyComment(body: CreateCommentBody): Promise<void> {
         credentials: 'include',
         body: JSON.stringify(body),
     })
+
+    if (res.status === 401) {
+        if (typeof window !== 'undefined') {
+            window.dispatchEvent(
+                new CustomEvent('auth-expired', { detail: { code: 401 } }),
+            )
+        }
+        throw new Error('Session expired. Please login again.')
+    }
 
     if (!res.ok) {
         throw new Error(await parseApiError(res, 'Failed to post reply'))
