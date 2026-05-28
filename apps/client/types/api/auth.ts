@@ -12,6 +12,5 @@ export type RegisterBody = {
 }
 
 export type AuthResponse = {
-    token: string
     user: User
 }

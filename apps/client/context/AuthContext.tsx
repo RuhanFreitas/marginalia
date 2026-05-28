@@ -1,14 +1,13 @@
 'use client'
 
 import type { User } from '@/types/api/user'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 
 type AuthContextType = {
     user: User | null
     setUser: (u: User | null) => void
-    login: (user: User, token: string) => void
+    login: (user: User) => void
     logout: () => void
-    clear: () => void
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
@@ -16,39 +15,16 @@ const AuthContext = createContext<AuthContextType | null>(null)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
 
-    useEffect(() => {
-        const storedUser = localStorage.getItem('user')
-
-        if (!storedUser || storedUser === 'undefined') return
-
-        try {
-            setUser(JSON.parse(storedUser))
-        } catch {
-            localStorage.removeItem('user')
-        }
-    }, [])
-
-    function login(user: User, token: string) {
-        localStorage.setItem('user', JSON.stringify(user))
-        localStorage.setItem('token', token)
+    function login(user: User) {
         setUser(user)
     }
 
     function logout() {
-        localStorage.removeItem('user')
-        localStorage.removeItem('token')
-
-        setUser(null)
-    }
-
-    function clear() {
-        localStorage.removeItem('user')
-        localStorage.removeItem('token')
         setUser(null)
     }
 
     return (
-        <AuthContext.Provider value={{ user, setUser, login, logout, clear }}>
+        <AuthContext.Provider value={{ user, setUser, login, logout }}>
             {children}
         </AuthContext.Provider>
     )

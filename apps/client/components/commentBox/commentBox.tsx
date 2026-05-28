@@ -27,13 +27,7 @@ export default function CommentBox({ marginaliaId }: { marginaliaId: number }) {
         setLoading(true)
 
         try {
-            const token = localStorage.getItem('token')
-
-            if (!token) {
-                throw new Error('Sign in to post a comment')
-            }
-
-            await postComment({ content: content.trim(), marginaliaId }, token)
+            await postComment({ content: content.trim(), marginaliaId })
 
             setContent('')
             router.refresh()

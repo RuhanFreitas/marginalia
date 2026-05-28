@@ -5,9 +5,12 @@ import Toggle from '../toggle/toggle'
 import { useAuth } from '@/context/AuthContext'
 import { MenuIcon, UserIcon, XIcon } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { logout as logoutFromBackend } from '@/lib/auth'
+import { useRouter } from 'next/navigation'
 
 export default function Navbar() {
     const { user, logout } = useAuth()
+    const router = useRouter()
     const [menuOpen, setMenuOpen] = useState(false)
     const menuRef = useRef<HTMLDivElement>(null)
 
@@ -36,9 +39,15 @@ export default function Navbar() {
         }
     }, [menuOpen])
 
-    function handleLogout() {
+    async function handleLogout() {
         setMenuOpen(false)
+        try {
+            await logoutFromBackend()
+        } catch {
+            // Continue logout even if backend call fails
+        }
         logout()
+        router.push('/')
     }
 
     return (
@@ -58,10 +67,7 @@ export default function Navbar() {
                 <div className="flex shrink-0 items-center gap-2 sm:gap-4">
                     {user ? (
                         <>
-                            <div
-                                ref={menuRef}
-                                className="relative sm:hidden"
-                            >
+                            <div ref={menuRef} className="relative sm:hidden">
                                 <button
                                     type="button"
                                     onClick={() => setMenuOpen((open) => !open)}

@@ -29,7 +29,7 @@ export class AuthController {
             maxAge: 1000 * 60 * 60 * 30,
         })
 
-        return data
+        return res.json(data)
     }
 
     @HttpCode(HttpStatus.OK)
@@ -46,6 +46,6 @@ export class AuthController {
             maxAge: 1000 * 60 * 60 * 30,
         })
 
-        return data
+        return res.json(data)
     }
 }

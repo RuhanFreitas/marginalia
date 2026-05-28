@@ -20,6 +20,6 @@ export class RolesGuard implements CanActivate {
         console.log('USER:', request.user)
         console.log('REQUIRED ROLES:', requiredRoles)
 
-        return requiredRoles.includes(user.role)
+        return requiredRoles.includes(String(user.role))
     }
 }

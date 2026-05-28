@@ -44,7 +44,7 @@ export default function Page() {
                 password,
             })
 
-            loginUser(res.user, res.token)
+            loginUser(res.user)
 
             router.push('/')
         } catch (err: unknown) {

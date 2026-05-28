@@ -38,20 +38,11 @@ export default function ReplyBox({
         setLoading(true)
 
         try {
-            const token = localStorage.getItem('token')
-
-            if (!token) {
-                throw new Error('Sign in to post a reply')
-            }
-
-            await replyComment(
-                {
-                    content: content.trim(),
-                    marginaliaId,
-                    parentId: commentId,
-                },
-                token,
-            )
+            await replyComment({
+                content: content.trim(),
+                marginaliaId,
+                parentId: commentId,
+            })
 
             setContent('')
             setOpen(false)

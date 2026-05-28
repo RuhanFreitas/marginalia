@@ -1,16 +1,16 @@
 'use client'
 
+import { useAuth } from '@/context/AuthContext'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 export function useRequireAuth() {
     const router = useRouter()
+    const { user } = useAuth()
 
     useEffect(() => {
-        const token = localStorage.getItem('token')
-
-        if (!token) {
+        if (!user) {
             router.replace('/login')
         }
-    }, [router])
+    }, [router, user])
 }

@@ -20,17 +20,11 @@ export function useCreateMarginalia(onSuccess?: () => void) {
             return false
         }
 
-        const token = localStorage.getItem('token')
-        if (!token) {
-            setError('Session expired. Please sign in again')
-            return false
-        }
-
         setError('')
         setLoading(true)
 
         try {
-            await createMarginalia(toCreateMarginaliaBody(form), token)
+            await createMarginalia(toCreateMarginaliaBody(form))
             onSuccess?.()
             router.refresh()
             return true

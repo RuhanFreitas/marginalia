@@ -34,7 +34,7 @@ export default function Page() {
 
     const router = useRouter()
 
-    const { user, clear, setUser } = useAuth()
+    const { user, setUser, logout } = useAuth()
 
     if (!user) return null
 
@@ -63,13 +63,7 @@ export default function Page() {
         setUpdateLoading(true)
 
         try {
-            const token = localStorage.getItem('token')
-
-            if (!token) {
-                throw new Error('Session expired. Please sign in again')
-            }
-
-            const updatedUser = await updateAccount(data, token)
+            const updatedUser = await updateAccount(data)
 
             setUser(updatedUser)
             setName('')
@@ -90,15 +84,9 @@ export default function Page() {
         setDeleteLoading(true)
 
         try {
-            const token = localStorage.getItem('token')
+            await deleteAccount()
 
-            if (!token) {
-                throw new Error('Session expired. Please sign in again')
-            }
-
-            await deleteAccount(token)
-
-            clear()
+            logout()
             router.push('/')
         } catch (err: unknown) {
             setDeleteError(getErrorMessage(err, 'Failed to delete account'))

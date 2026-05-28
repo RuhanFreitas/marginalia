@@ -21,13 +21,6 @@ export function parseApiErrorMessage(
     return fallback
 }
 
-export function getAuthHeaders(token: string): HeadersInit {
-    return {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-    }
-}
-
 export async function parseApiError(
     res: Response,
     fallback: string,

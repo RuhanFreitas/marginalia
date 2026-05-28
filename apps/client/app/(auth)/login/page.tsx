@@ -39,7 +39,7 @@ export default function Page() {
         try {
             const res = await login({ email: email.trim(), password })
 
-            loginUser(res.user, res.token)
+            loginUser(res.user)
 
             router.push('/')
         } catch (err: unknown) {

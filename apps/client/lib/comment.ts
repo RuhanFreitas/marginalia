@@ -1,22 +1,22 @@
 import { handleJsonResponse, parseApiError } from '@/lib/api'
+import { API_BASE_URL } from '@/lib/config'
 import type { Comment, CreateCommentBody } from '@/types/api/comment'
 
 export async function getComments(slug: string): Promise<Comment[]> {
-    const res = await fetch(`http://localhost:3001/comment/${slug}/comments`)
+    const res = await fetch(`${API_BASE_URL}/comment/${slug}/comments`, {
+        credentials: 'include',
+    })
 
     return handleJsonResponse<Comment[]>(res, 'Failed to load comments')
 }
 
-export async function postComment(
-    body: CreateCommentBody,
-    token: string,
-): Promise<void> {
-    const res = await fetch('http://localhost:3001/comment', {
+export async function postComment(body: CreateCommentBody): Promise<void> {
+    const res = await fetch(`${API_BASE_URL}/comment`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
         },
+        credentials: 'include',
         body: JSON.stringify(body),
     })
 
@@ -25,16 +25,13 @@ export async function postComment(
     }
 }
 
-export async function replyComment(
-    body: CreateCommentBody,
-    token: string,
-): Promise<void> {
-    const res = await fetch('http://localhost:3001/comment', {
+export async function replyComment(body: CreateCommentBody): Promise<void> {
+    const res = await fetch(`${API_BASE_URL}/comment`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
         },
+        credentials: 'include',
         body: JSON.stringify(body),
     })
 
