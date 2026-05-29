@@ -1,10 +1,8 @@
-import { Inter, Libre_Baskerville } from 'next/font/google'
+﻿import { Inter, Libre_Baskerville } from 'next/font/google'
 import type { Metadata } from 'next'
 import './globals.css'
-import Navbar from '@/components/navbar/navbar'
-import Footer from '@/components/footer/footer'
-import ThemeScript from '@/components/themeScript/themeScript'
-import { AuthProvider } from '@/context/AuthContext'
+import { Footer, Navbar, ThemeScript } from '@/components/layout'
+import { AuthProvider } from '@/providers'
 
 const inter = Inter({
     subsets: ['latin'],

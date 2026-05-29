@@ -1,15 +1,15 @@
-'use client'
+﻿'use client'
 
-import FormError from '@/components/formError/formError'
+import { FormError } from '@/components/ui'
 import { getErrorMessage } from '@/lib/api'
 import { login } from '@/lib/auth'
 import { validateLogin } from '@/lib/validation'
 import { LockIcon, MailIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { FormEvent, useState } from 'react'
-import { useAuth } from '@/context/AuthContext'
+import { useAuth } from '@/providers'
 import Link from 'next/link'
-import { useRedirectIfAuth } from '@/hooks/useRedirectIfAuth'
+import { useRedirectIfAuth } from '@/hooks/auth'
 
 export default function Page() {
     useRedirectIfAuth()

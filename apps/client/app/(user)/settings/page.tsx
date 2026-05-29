@@ -1,8 +1,8 @@
-'use client'
+﻿'use client'
 
-import FormError from '@/components/formError/formError'
-import { useAuth } from '@/context/AuthContext'
-import { useRequireAuth } from '@/hooks/useRequireAuth'
+import { FormError } from '@/components/ui'
+import { useAuth } from '@/providers'
+import { useRequireAuth } from '@/hooks/auth'
 import { getErrorMessage } from '@/lib/api'
 import { deleteAccount } from '@/lib/auth'
 import { updateAccount } from '@/lib/user'

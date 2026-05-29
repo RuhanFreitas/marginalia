@@ -1,8 +1,8 @@
-import HomeShell from '@/components/homeShell/homeShell'
-import List from '@/components/list/list'
-import PageError from '@/components/pageError/pageError'
-import Search from '@/components/search/search'
-import { SearchProvider } from '@/context/SearchContext'
+﻿import { HomeShell } from '@/components/layout'
+import { MarginaliaList } from '@/components/marginalia'
+import { PageError } from '@/components/ui'
+import { SearchBar } from '@/components/search'
+import { SearchProvider } from '@/providers'
 import { getErrorMessage } from '@/lib/api'
 import { getAllMarginalias } from '@/lib/marginalia'
 import { Marginalia } from '@/types/api/marginalia'
@@ -36,8 +36,8 @@ export default async function Page() {
     return (
         <SearchProvider marginalias={marginalias}>
             <HomeShell>
-                <Search />
-                <List />
+                <SearchBar />
+                <MarginaliaList />
             </HomeShell>
         </SearchProvider>
     )
