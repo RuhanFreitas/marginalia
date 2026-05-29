@@ -59,9 +59,19 @@ describe('markdownToHtml', () => {
         expect(output).toContain('This is a quote')
     })
 
-    it('should handle underline tags', () => {
+    it('should strip unsafe html from raw input', () => {
+        const input =
+            'Hello <script>alert("xss")</script> **bold** <img src=x onerror=alert(1)>'
+        const output = markdownToHtml(input)
+        expect(output).not.toContain('<script')
+        expect(output).not.toContain('onerror')
+        expect(output).toContain('<strong>bold</strong>')
+    })
+
+    it('should strip unsupported html tags like underline', () => {
         const input = 'This is <u>underlined</u> text'
         const output = markdownToHtml(input)
-        expect(output).toContain('<u>underlined</u>')
+        expect(output).not.toContain('<u>')
+        expect(output).toContain('underlined')
     })
 })

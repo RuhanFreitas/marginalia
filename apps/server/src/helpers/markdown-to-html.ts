@@ -1,3 +1,5 @@
+import { sanitizeContentHtml } from './sanitize-html-content'
+
 export function markdownToHtml(markdown: string): string {
     let html = markdown
 
@@ -101,5 +103,5 @@ export function markdownToHtml(markdown: string): string {
         )
     }
 
-    return processedLines.join('<br>')
+    return sanitizeContentHtml(processedLines.join('<br>'))
 }
