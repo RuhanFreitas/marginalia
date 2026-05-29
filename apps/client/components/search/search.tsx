@@ -15,7 +15,7 @@ export default function Search() {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         type="text"
-                        placeholder="Search..."
+                        placeholder="Search by title, author, or book..."
                         className="border-none focus:outline-none rounded-md text-default text-sm"
                     />
                 </div>

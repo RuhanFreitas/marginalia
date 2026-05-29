@@ -23,12 +23,19 @@ const normalize = (text: string) =>
         .replace(/[\u0300-\u036f]/g, '')
         .replace(/\s+/g, '')
 
+const matchesQuery = (item: Marginalia, query: string) => {
+    const normalizedQuery = normalize(query)
+    if (!normalizedQuery) return true
+
+    return [item.title, item.author, item.book].some((field) =>
+        normalize(field).includes(normalizedQuery),
+    )
+}
+
 export function SearchProvider({ children, marginalias }: Props) {
     const [query, setQuery] = useState('')
 
-    const filtered = marginalias.filter((item) =>
-        normalize(item.title).includes(normalize(query)),
-    )
+    const filtered = marginalias.filter((item) => matchesQuery(item, query))
 
     return (
         <SearchContext.Provider value={{ query, setQuery, filtered }}>
