@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { UserModule } from './user/user.module'
+import {
+    AuthModule,
+    CommentModule,
+    MarginaliaModule,
+    UserModule,
+} from './modules'
 import { PrismaModule } from './prisma/prisma.module'
-import { MarginaliaModule } from './marginalia/marginalia.module'
-import { CommentModule } from './comment/comment.module'
-import { AuthModule } from './auth/auth.module'
 
 @Module({
     imports: [

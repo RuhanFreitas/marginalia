@@ -4,7 +4,7 @@ import { ValidationPipe } from '@nestjs/common'
 import {
     PrismaExceptionFilter,
     PrismaValidationExceptionFilter,
-} from './helpers/prisma-exception.filter'
+} from './common/filters'
 import cookieParser from 'cookie-parser'
 
 async function bootstrap() {
