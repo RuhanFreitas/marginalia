@@ -11,7 +11,9 @@
         "dev:server": "npm run start:dev --workspace server",
         "build": "npm run build --workspaces",
         "lint": "npm run lint --workspaces",
-        "test": "npm run test --workspace server"
+        "test": "npm run test --workspace server && npm run test --workspace frontend",
+        "test:server": "npm run test --workspace server",
+        "test:frontend": "npm run test --workspace frontend"
     },
     "devDependencies": {
         "@types/cookie-parser": "^1.4.10",
