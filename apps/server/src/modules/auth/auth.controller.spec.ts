@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing'
+
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
+import { createMockResponse } from '../../../test/helpers'
 
 describe('AuthController', () => {
     let controller: AuthController
@@ -13,75 +15,80 @@ describe('AuthController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [AuthController],
-            providers: [
-                {
-                    provide: AuthService,
-                    useValue: mockAuthService,
-                },
-            ],
+            providers: [{ provide: AuthService, useValue: mockAuthService }],
         }).compile()
 
         controller = module.get<AuthController>(AuthController)
-    })
-
-    afterEach(() => {
         jest.clearAllMocks()
     })
 
     describe('register', () => {
-        it('should call authService.register and return result', async () => {
-            const registerUserDTO = {
+        it('should set auth cookie and return user payload', async () => {
+            const registerDTO = {
                 name: 'John Doe',
-                email: 'Johndoe@example.com',
+                email: 'john@example.com',
                 password: '123456789',
             }
-
             const expectedResponse = {
                 token: 'jwt-token',
-                user: {
-                    id: '1',
-                    name: 'John Doe',
-                    email: 'johndoe@example.com',
-                    role: 'USER',
-                },
+                user: { id: 1, name: 'John Doe', email: 'john@example.com' },
             }
+            const res = createMockResponse()
 
             mockAuthService.register.mockResolvedValue(expectedResponse)
 
-            const response = await controller.register(registerUserDTO)
+            await controller.register(registerDTO, res)
 
-            expect(mockAuthService.register).toHaveBeenCalledWith(
-                registerUserDTO,
+            expect(mockAuthService.register).toHaveBeenCalledWith(registerDTO)
+            expect(res.cookie).toHaveBeenCalledWith(
+                'token',
+                'jwt-token',
+                expect.objectContaining({ httpOnly: true }),
             )
-
-            expect(response).toEqual(expectedResponse)
+            expect(res.json).toHaveBeenCalledWith(expectedResponse)
         })
     })
 
     describe('login', () => {
-        it('should call authService.login and return jwt token and user', async () => {
-            const loginUserDTO = {
-                email: 'Johndoe@example.com',
+        it('should set auth cookie and return user payload', async () => {
+            const loginDTO = {
+                email: 'john@example.com',
                 password: '123456789',
             }
-
             const expectedResponse = {
                 token: 'jwt-token',
-                user: {
-                    id: '1',
-                    name: 'John Doe',
-                    email: 'johndoe@example.com',
-                    role: 'USER',
-                },
+                user: { id: 1, name: 'John Doe', email: 'john@example.com' },
             }
+            const res = createMockResponse()
 
             mockAuthService.login.mockResolvedValue(expectedResponse)
 
-            const response = await controller.login(loginUserDTO)
+            await controller.login(loginDTO, res)
 
-            expect(mockAuthService.login).toHaveBeenCalledWith(loginUserDTO)
+            expect(mockAuthService.login).toHaveBeenCalledWith(loginDTO)
+            expect(res.cookie).toHaveBeenCalledWith(
+                'token',
+                'jwt-token',
+                expect.objectContaining({ httpOnly: true }),
+            )
+            expect(res.json).toHaveBeenCalledWith(expectedResponse)
+        })
+    })
 
-            expect(response).toEqual(expectedResponse)
+    describe('logout', () => {
+        it('should clear auth cookie', async () => {
+            const res = createMockResponse()
+
+            await controller.logout(res)
+
+            expect(res.cookie).toHaveBeenCalledWith(
+                'token',
+                '',
+                expect.objectContaining({ maxAge: 0 }),
+            )
+            expect(res.json).toHaveBeenCalledWith({
+                message: 'Logged out successfully',
+            })
         })
     })
 })

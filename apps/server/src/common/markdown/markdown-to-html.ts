@@ -16,16 +16,16 @@ export function markdownToHtml(markdown: string): string {
     // Inline code: `text` -> <code>text</code>
     html = html.replace(/`(.+?)`/g, '<code>$1</code>')
 
+    // Images before links so ![alt](url) is not parsed as a link
+    html = html.replace(
+        /!\[(.+?)\]\((.+?)\)/g,
+        '<img src="$2" alt="$1" style="max-width: 100%; height: auto;">',
+    )
+
     // Links: [text](url) -> <a href="url">text</a>
     html = html.replace(
         /\[(.+?)\]\((.+?)\)/g,
         '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>',
-    )
-
-    // Images: ![alt](url) -> <img src="url" alt="alt">
-    html = html.replace(
-        /!\[(.+?)\]\((.+?)\)/g,
-        '<img src="$2" alt="$1" style="max-width: 100%; height: auto;">',
     )
 
     // Split into lines for block-level processing

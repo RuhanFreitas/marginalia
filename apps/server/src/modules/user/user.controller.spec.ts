@@ -1,7 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing'
+
 import { UserController } from './user.controller'
 import { UserService } from './user.service'
-import { JwtRequest } from '../../common/types/jwt-request'
+import { UpdateUserDTO } from './dto/update-user.dto'
+import { createJwtRequest } from '../../../test/helpers'
 
 describe('UserController', () => {
     let controller: UserController
@@ -15,33 +17,17 @@ describe('UserController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [UserController],
-            providers: [
-                {
-                    provide: UserService,
-                    useValue: mockUserService,
-                },
-            ],
+            providers: [{ provide: UserService, useValue: mockUserService }],
         }).compile()
 
         controller = module.get<UserController>(UserController)
-
         jest.clearAllMocks()
     })
 
     describe('findMyself', () => {
         it('should return the authenticated user', async () => {
-            const req = {
-                user: {
-                    sub: 1,
-                    role: 'USER',
-                },
-            } as JwtRequest
-
-            const user = {
-                id: 1,
-                name: 'Ruhan',
-                email: 'ruhan@email.com',
-            }
+            const req = createJwtRequest(1)
+            const user = { id: 1, name: 'Ruhan', email: 'ruhan@email.com' }
 
             mockUserService.findMyself.mockResolvedValue(user)
 
@@ -50,30 +36,18 @@ describe('UserController', () => {
             expect(mockUserService.findMyself).toHaveBeenCalledWith(
                 req.user.sub,
             )
-
             expect(result).toEqual(user)
         })
     })
 
     describe('updateMyself', () => {
         it('should update the authenticated user', async () => {
-            const req = {
-                user: {
-                    sub: 1,
-                    role: 'USER',
-                },
-            } as JwtRequest
-
+            const req = createJwtRequest(1)
             const updateUserDTO = {
                 name: 'Updated Name',
                 email: 'updated@email.com',
-            }
-
-            const updatedUser = {
-                id: 1,
-                name: 'Updated Name',
-                email: 'updated@email.com',
-            }
+            } as UpdateUserDTO
+            const updatedUser = { id: 1, ...updateUserDTO }
 
             mockUserService.updateMyself.mockResolvedValue(updatedUser)
 
@@ -83,20 +57,13 @@ describe('UserController', () => {
                 req.user.sub,
                 updateUserDTO,
             )
-
             expect(result).toEqual(updatedUser)
         })
     })
 
     describe('delete', () => {
         it('should delete the authenticated user', async () => {
-            const req = {
-                user: {
-                    sub: 1,
-                    role: 'USER',
-                },
-            } as JwtRequest
-
+            const req = createJwtRequest(1)
             const deletedUser = {
                 id: 1,
                 name: 'Ruhan',
@@ -108,7 +75,6 @@ describe('UserController', () => {
             const result = await controller.delete(req)
 
             expect(mockUserService.delete).toHaveBeenCalledWith(req.user.sub)
-
             expect(result).toEqual(deletedUser)
         })
     })

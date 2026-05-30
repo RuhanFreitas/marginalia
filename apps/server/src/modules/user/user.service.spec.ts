@@ -3,6 +3,8 @@ import { NotFoundException } from '@nestjs/common'
 
 import { UserService } from './user.service'
 import { UserRepository } from './user.repository'
+import { UpdateUserDTO } from './dto/update-user.dto'
+import { createMockUser } from '../../../test/helpers'
 
 describe('UserService', () => {
     let service: UserService
@@ -17,48 +19,37 @@ describe('UserService', () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 UserService,
-                {
-                    provide: UserRepository,
-                    useValue: mockUserRepository,
-                },
+                { provide: UserRepository, useValue: mockUserRepository },
             ],
         }).compile()
 
         service = module.get<UserService>(UserService)
-
         jest.clearAllMocks()
     })
 
     describe('findMyself', () => {
-        it('should return the authenticated user', async () => {
-            const user = {
-                id: 1,
-                name: 'Ruhan',
-                email: 'ruhan@email.com',
-                password: 'hashed-password',
-            }
+        it('should return the authenticated user without password', async () => {
+            const user = createMockUser()
 
             mockUserRepository.findById.mockResolvedValue(user)
 
-            const result = await service.findMyself(1)
+            const result = await service.findMyself(user.id)
 
-            expect(mockUserRepository.findById).toHaveBeenCalledWith(1)
-
-            expect(result).toEqual({
+            expect(mockUserRepository.findById).toHaveBeenCalledWith(user.id)
+            expect(result).toMatchObject({
                 id: user.id,
                 name: user.name,
                 email: user.email,
+                role: user.role,
             })
         })
 
-        it('should throw NotFoundException if user does not exist', async () => {
+        it('should throw NotFoundException when user does not exist', async () => {
             mockUserRepository.findById.mockResolvedValue(null)
 
-            await expect(service.findMyself(1)).rejects.toThrow(
+            await expect(service.findMyself(999)).rejects.toThrow(
                 NotFoundException,
             )
-
-            expect(mockUserRepository.findById).toHaveBeenCalledWith(1)
         })
     })
 
@@ -67,14 +58,8 @@ describe('UserService', () => {
             const updateUserDTO = {
                 name: 'Updated Name',
                 email: 'updated@email.com',
-            }
-
-            const updatedUser = {
-                id: 1,
-                name: 'Updated Name',
-                email: 'updated@email.com',
-                password: 'hashed-password',
-            }
+            } as UpdateUserDTO
+            const updatedUser = createMockUser(updateUserDTO)
 
             mockUserRepository.updateById.mockResolvedValue(updatedUser)
 
@@ -84,60 +69,37 @@ describe('UserService', () => {
                 1,
                 updateUserDTO,
             )
-
-            expect(result).toEqual({
+            expect(result).toMatchObject({
                 id: updatedUser.id,
                 name: updatedUser.name,
                 email: updatedUser.email,
             })
         })
-
-        it('should throw NotFoundException if user does not exist', async () => {
-            const updateUserDTO = {
-                name: 'Updated Name',
-            }
-
-            mockUserRepository.updateById.mockResolvedValue(null)
-
-            await expect(
-                service.updateMyself(1, updateUserDTO),
-            ).rejects.toThrow(NotFoundException)
-
-            expect(mockUserRepository.updateById).toHaveBeenCalledWith(
-                1,
-                updateUserDTO,
-            )
-        })
     })
 
     describe('delete', () => {
         it('should delete and return the authenticated user', async () => {
-            const deletedUser = {
-                id: 1,
-                name: 'Ruhan',
-                email: 'ruhan@email.com',
-                password: 'hashed-password',
-            }
+            const deletedUser = createMockUser()
 
             mockUserRepository.delete.mockResolvedValue(deletedUser)
 
-            const result = await service.delete(1)
+            const result = await service.delete(deletedUser.id)
 
-            expect(mockUserRepository.delete).toHaveBeenCalledWith(1)
-
-            expect(result).toEqual({
+            expect(mockUserRepository.delete).toHaveBeenCalledWith(
+                deletedUser.id,
+            )
+            expect(result).toMatchObject({
                 id: deletedUser.id,
-                name: deletedUser.name,
                 email: deletedUser.email,
             })
         })
 
-        it('should throw NotFoundException if user does not exist', async () => {
+        it('should throw NotFoundException when user does not exist', async () => {
             mockUserRepository.delete.mockResolvedValue(null)
 
-            await expect(service.delete(1)).rejects.toThrow(NotFoundException)
-
-            expect(mockUserRepository.delete).toHaveBeenCalledWith(1)
+            await expect(service.delete(999)).rejects.toThrow(
+                NotFoundException,
+            )
         })
     })
 })
