@@ -22,3 +22,5 @@ export type CreateMarginaliaBody = {
     cover: string
     contentEn: string
 }
+
+export type UpdateMarginaliaBody = CreateMarginaliaBody

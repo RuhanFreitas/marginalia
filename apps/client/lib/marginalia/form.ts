@@ -1,7 +1,10 @@
-import type { CreateMarginaliaBody } from '@/types/api/marginalia'
+import type {
+    CreateMarginaliaBody,
+    UpdateMarginaliaBody,
+} from '@/types/api/marginalia'
 import type { MarginaliaFormValues } from '@/types/forms/marginaliaForm'
 
-export function toCreateMarginaliaBody(
+export function toMarginaliaBody(
     form: MarginaliaFormValues,
 ): CreateMarginaliaBody {
     return {
@@ -12,4 +15,12 @@ export function toCreateMarginaliaBody(
         cover: form.cover.trim(),
         contentEn: form.contentEn.trim(),
     }
+}
+
+export const toCreateMarginaliaBody = toMarginaliaBody
+
+export function toUpdateMarginaliaBody(
+    form: MarginaliaFormValues,
+): UpdateMarginaliaBody {
+    return toMarginaliaBody(form)
 }

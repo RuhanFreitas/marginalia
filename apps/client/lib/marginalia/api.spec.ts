@@ -42,4 +42,27 @@ describe('marginalia api', () => {
             created,
         )
     })
+
+    it('updateMarginalia patches body', async () => {
+        const body = {
+            title: 'Updated',
+            book: 'B',
+            author: 'A',
+            description: 'D',
+            cover: 'https://example.com/c.jpg',
+            contentEn: 'C',
+        }
+        const updated = createMarginalia({ ...body, id: 2 })
+        vi.mocked(fetch).mockResolvedValue(
+            new Response(JSON.stringify(updated), { status: 200 }),
+        )
+
+        await expect(marginaliaApi.updateMarginalia(2, body)).resolves.toEqual(
+            updated,
+        )
+        expect(fetch).toHaveBeenCalledWith(
+            `${API_BASE_URL}/marginalia/2`,
+            expect.objectContaining({ method: 'PATCH' }),
+        )
+    })
 })

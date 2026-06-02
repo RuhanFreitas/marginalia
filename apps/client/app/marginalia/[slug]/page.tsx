@@ -1,4 +1,5 @@
 import { Comment, CommentBox } from '@/components/comments'
+import { EditMarginaliaButton } from '@/components/marginalia'
 import { FormError, PageError } from '@/components/ui'
 import { getComments } from '@/lib/comments'
 import { getMarginalia } from '@/lib/marginalia'
@@ -43,13 +44,14 @@ export default async function Page({
 
     return (
         <div className="mx-auto h-full max-w-5xl px-6 md:px-0">
-            <div className="py-8 md:py-12">
+            <div className="flex items-center justify-between gap-4 py-8 md:py-12">
                 <Link href="/">
                     <button className="flex cursor-pointer items-center gap-3 text-sm text-default/60 hover:text-default">
                         <ArrowLeftIcon width={18} />
                         All entries
                     </button>
                 </Link>
+                <EditMarginaliaButton marginalia={marginalia} />
             </div>
 
             <div className="grid grid-cols-1 gap-10 md:grid-cols-10 md:gap-8">
