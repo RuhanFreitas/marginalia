@@ -1,9 +1,9 @@
 ﻿import { handleJsonResponse, parseApiError } from '@/lib/api'
-import { API_BASE_URL } from '@/lib/api'
+import { getApiBaseUrl } from '@/lib/api'
 import type { Comment, CreateCommentBody } from '@/types/api/comment'
 
 export async function getComments(slug: string): Promise<Comment[]> {
-    const res = await fetch(`${API_BASE_URL}/comment/${slug}/comments`, {
+    const res = await fetch(`${getApiBaseUrl()}/comment/${slug}/comments`, {
         credentials: 'include',
     })
 
@@ -11,7 +11,7 @@ export async function getComments(slug: string): Promise<Comment[]> {
 }
 
 export async function postComment(body: CreateCommentBody): Promise<void> {
-    const res = await fetch(`${API_BASE_URL}/comment`, {
+    const res = await fetch(`${getApiBaseUrl()}/comment`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export async function postComment(body: CreateCommentBody): Promise<void> {
 }
 
 export async function replyComment(body: CreateCommentBody): Promise<void> {
-    const res = await fetch(`${API_BASE_URL}/comment`, {
+    const res = await fetch(`${getApiBaseUrl()}/comment`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

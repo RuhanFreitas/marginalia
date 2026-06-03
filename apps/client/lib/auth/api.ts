@@ -1,11 +1,11 @@
 ﻿import { handleJsonResponse, parseApiError } from '@/lib/api'
-import { API_BASE_URL } from '@/lib/api'
+import { getApiBaseUrl } from '@/lib/api'
 import type { AuthResponse, LoginBody, RegisterBody } from '@/types/api/auth'
 import type { User } from '@/types/api/user'
 
 export async function getCurrentUser(): Promise<User | null> {
     try {
-        const res = await fetch(`${API_BASE_URL}/user`, {
+        const res = await fetch(`${getApiBaseUrl()}/user`, {
             credentials: 'include',
         })
 
@@ -18,7 +18,7 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 export async function login(body: LoginBody): Promise<AuthResponse> {
-    const res = await fetch(`${API_BASE_URL}/auth/login`, {
+    const res = await fetch(`${getApiBaseUrl()}/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export async function login(body: LoginBody): Promise<AuthResponse> {
 }
 
 export async function register(body: RegisterBody): Promise<AuthResponse> {
-    const res = await fetch(`${API_BASE_URL}/auth/register`, {
+    const res = await fetch(`${getApiBaseUrl()}/auth/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export async function register(body: RegisterBody): Promise<AuthResponse> {
 }
 
 export async function logout(): Promise<void> {
-    const res = await fetch(`${API_BASE_URL}/auth/logout`, {
+    const res = await fetch(`${getApiBaseUrl()}/auth/logout`, {
         method: 'POST',
         credentials: 'include',
     })
@@ -58,7 +58,7 @@ export async function logout(): Promise<void> {
 }
 
 export async function deleteAccount(): Promise<void> {
-    const res = await fetch(`${API_BASE_URL}/user`, {
+    const res = await fetch(`${getApiBaseUrl()}/user`, {
         method: 'DELETE',
         credentials: 'include',
     })

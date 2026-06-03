@@ -1,9 +1,9 @@
 ﻿import { handleJsonResponse } from '@/lib/api'
-import { API_BASE_URL } from '@/lib/api'
+import { getApiBaseUrl } from '@/lib/api'
 import type { UpdateUserBody, User } from '@/types/api/user'
 
 export async function updateAccount(body: UpdateUserBody): Promise<User> {
-    const res = await fetch(`${API_BASE_URL}/user`, {
+    const res = await fetch(`${getApiBaseUrl()}/user`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',

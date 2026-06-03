@@ -1,2 +1,2 @@
 export * from './client'
-export { API_BASE_URL } from './config'
+export { API_BASE_URL, getApiBaseUrl } from './config'

@@ -1,0 +1,13 @@
+node_modules
+**/node_modules
+.git
+.gitignore
+**/.next
+**/dist
+**/coverage
+**/*.md
+.cursor
+agent-transcripts
+**/.env
+**/.env.local
+apps/server/compose.yml

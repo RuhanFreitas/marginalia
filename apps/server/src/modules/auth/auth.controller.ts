@@ -12,6 +12,9 @@ import { AuthService } from './auth.service'
 import { LoginDTO } from './dto/login.dto'
 import { RegisterDTO } from './dto/register.dto'
 import { Response } from 'express'
+import { getAuthCookieOptions } from '../../common/auth/auth-cookie.options'
+
+const AUTH_COOKIE_MAX_AGE_MS = 1000 * 60 * 60 * 30
 
 @Controller('auth')
 export class AuthController {
@@ -24,12 +27,7 @@ export class AuthController {
 
         const { token } = data
 
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: 1000 * 60 * 60 * 30,
-        })
+        res.cookie('token', token, getAuthCookieOptions(AUTH_COOKIE_MAX_AGE_MS))
 
         return res.json(data)
     }
@@ -41,12 +39,7 @@ export class AuthController {
 
         const { token } = data
 
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: 1000 * 60 * 60 * 30,
-        })
+        res.cookie('token', token, getAuthCookieOptions(AUTH_COOKIE_MAX_AGE_MS))
 
         return res.json(data)
     }
@@ -55,13 +48,7 @@ export class AuthController {
     @Post('logout')
     async logout(@Res() res: Response) {
         // Clear cookie unconditionally so logout works even if token is invalid/expired
-        res.cookie('token', '', {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: 0,
-            path: '/',
-        })
+        res.cookie('token', '', getAuthCookieOptions(0))
         return res.json({ message: 'Logged out successfully' })
     }
 }

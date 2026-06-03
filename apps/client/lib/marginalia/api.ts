@@ -1,5 +1,5 @@
 ﻿import { handleJsonResponse } from '@/lib/api'
-import { API_BASE_URL } from '@/lib/api'
+import { getApiBaseUrl } from '@/lib/api'
 import type {
     CreateMarginaliaBody,
     Marginalia,
@@ -9,7 +9,7 @@ import type {
 const MARGINALIA_PATH = '/marginalia'
 
 export async function getAllMarginalias(): Promise<Marginalia[]> {
-    const res = await fetch(`${API_BASE_URL}${MARGINALIA_PATH}/all`, {
+    const res = await fetch(`${getApiBaseUrl()}${MARGINALIA_PATH}/all`, {
         credentials: 'include',
     })
 
@@ -17,7 +17,7 @@ export async function getAllMarginalias(): Promise<Marginalia[]> {
 }
 
 export async function getMarginalia(id: string): Promise<Marginalia> {
-    const res = await fetch(`${API_BASE_URL}${MARGINALIA_PATH}/${id}`, {
+    const res = await fetch(`${getApiBaseUrl()}${MARGINALIA_PATH}/${id}`, {
         credentials: 'include',
     })
 
@@ -27,7 +27,7 @@ export async function getMarginalia(id: string): Promise<Marginalia> {
 export async function createMarginalia(
     body: CreateMarginaliaBody,
 ): Promise<Marginalia> {
-    const res = await fetch(`${API_BASE_URL}${MARGINALIA_PATH}`, {
+    const res = await fetch(`${getApiBaseUrl()}${MARGINALIA_PATH}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ export async function updateMarginalia(
     id: number,
     body: UpdateMarginaliaBody,
 ): Promise<Marginalia> {
-    const res = await fetch(`${API_BASE_URL}${MARGINALIA_PATH}/${id}`, {
+    const res = await fetch(`${getApiBaseUrl()}${MARGINALIA_PATH}/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
