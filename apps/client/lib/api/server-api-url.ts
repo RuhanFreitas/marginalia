@@ -1,29 +1,23 @@
 import 'server-only'
 
-import { headers } from 'next/headers'
+/** Nest API on the Compose network (no `/api` prefix — routes are `/marginalia`, etc.). */
+const DOCKER_API_BASE = 'http://backend:3001'
 
-/** Reach API via nginx on the Compose network (`/api` → Nest). */
-const DOCKER_NGINX_API_BASE = 'http://nginx/api'
+const DEFAULT_DEV_API = 'http://localhost:3001'
 
 /**
  * Absolute API base URL for Server Components / SSR fetch.
- * Node fetch cannot use relative URLs such as `/api`.
+ * Must not use the browser Host header — hairpin to the public IP fails inside Docker.
  */
-export async function getServerApiBaseUrl(): Promise<string> {
-    const h = await headers()
-    const host = h.get('x-forwarded-host') ?? h.get('host')
-    const proto =
-        (h.get('x-forwarded-proto') ?? 'http').split(',')[0]?.trim() ?? 'http'
-    const apiPrefix = process.env.NEXT_PUBLIC_API_URL ?? '/api'
-
-    if (host && apiPrefix.startsWith('/')) {
-        return `${proto}://${host}${apiPrefix}`.replace(/\/$/, '')
-    }
-
+export function getServerApiBaseUrl(): string {
     const internal = process.env['API_INTERNAL_URL']
     if (internal?.startsWith('http')) {
         return internal.replace(/\/$/, '')
     }
 
-    return DOCKER_NGINX_API_BASE
+    if (process.env.NODE_ENV === 'production') {
+        return DOCKER_API_BASE
+    }
+
+    return DEFAULT_DEV_API
 }

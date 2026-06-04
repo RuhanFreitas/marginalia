@@ -16,7 +16,7 @@ FROM deps AS build
 
 ARG NEXT_PUBLIC_API_URL=/api
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
-ENV API_INTERNAL_URL=http://nginx/api
+ENV API_INTERNAL_URL=http://backend:3001
 ENV NODE_OPTIONS=--max-old-space-size=768
 
 COPY tsconfig.base.json ./
@@ -32,7 +32,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
-ENV API_INTERNAL_URL=http://nginx/api
+ENV API_INTERNAL_URL=http://backend:3001
 
 RUN addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 nextjs
