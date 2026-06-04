@@ -2,6 +2,10 @@ FROM node:22-alpine AS deps
 
 WORKDIR /app
 
+ENV npm_config_update_notifier=false \
+    npm_config_fund=false \
+    npm_config_audit=false
+
 COPY package.json package-lock.json ./
 COPY apps/client/package.json ./apps/client/
 COPY packages/ui/package.json ./packages/ui/
@@ -12,6 +16,7 @@ FROM deps AS build
 
 ARG NEXT_PUBLIC_API_URL=/api
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NODE_OPTIONS=--max-old-space-size=768
 
 COPY tsconfig.base.json ./
 COPY packages/ui ./packages/ui

@@ -2,6 +2,10 @@ FROM node:22-alpine AS deps
 
 WORKDIR /app
 
+ENV npm_config_update_notifier=false \
+    npm_config_fund=false \
+    npm_config_audit=false
+
 COPY package.json package-lock.json ./
 COPY apps/server/package.json ./apps/server/
 
@@ -17,6 +21,12 @@ WORKDIR /app/apps/server
 RUN npx prisma generate
 RUN npm run build
 
+FROM deps AS prod-deps
+
+ENV NODE_ENV=production
+
+RUN npm prune --omit=dev
+
 FROM node:22-alpine AS runner
 
 WORKDIR /app
@@ -27,9 +37,7 @@ RUN apk add --no-cache openssl
 
 COPY package.json package-lock.json ./
 COPY apps/server/package.json ./apps/server/
-
-RUN npm ci --workspace=server --omit=dev --include-workspace-root
-
+COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=build /app/apps/server/dist ./apps/server/dist
 COPY --from=build /app/apps/server/prisma ./apps/server/prisma
 COPY --from=build /app/apps/server/prisma.config.ts ./apps/server/prisma.config.ts
