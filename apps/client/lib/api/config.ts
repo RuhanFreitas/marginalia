@@ -1,13 +1,42 @@
-const PUBLIC_API_URL =
-    process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
+const DEFAULT_DEV_API = 'http://localhost:3001'
 
-/** Browser and SSR fallback when no internal URL is set. */
-export const API_BASE_URL = PUBLIC_API_URL
+/** Docker Compose service name for the Nest API (SSR fallback). */
+const DEFAULT_INTERNAL_API = 'http://server:3001'
 
-/** Server-side fetches in Docker use the internal service URL. */
+function readPublicApiUrl(): string {
+    return process.env.NEXT_PUBLIC_API_URL ?? DEFAULT_DEV_API
+}
+
+function readInternalApiUrl(): string | undefined {
+    return process.env['API_INTERNAL_URL']
+}
+
+function isAbsoluteUrl(url: string): boolean {
+    return /^https?:\/\//i.test(url)
+}
+
+/** Public API base (often `/api` in production behind nginx). */
+export const API_BASE_URL = readPublicApiUrl()
+
+/**
+ * Base URL for API requests.
+ * - Browser: relative `/api` is valid (same origin).
+ * - Server (SSR): must be absolute; uses API_INTERNAL_URL or Docker default.
+ */
 export function getApiBaseUrl(): string {
-    if (typeof window === 'undefined' && process.env.API_INTERNAL_URL) {
-        return process.env.API_INTERNAL_URL
+    if (typeof window !== 'undefined') {
+        return readPublicApiUrl()
     }
-    return PUBLIC_API_URL
+
+    const internal = readInternalApiUrl()
+    if (internal) {
+        return internal.replace(/\/$/, '')
+    }
+
+    const publicUrl = readPublicApiUrl()
+    if (isAbsoluteUrl(publicUrl)) {
+        return publicUrl.replace(/\/$/, '')
+    }
+
+    return DEFAULT_INTERNAL_API
 }
