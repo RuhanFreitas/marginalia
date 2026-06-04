@@ -16,7 +16,7 @@ import { getAuthCookieOptions } from '../../common/auth/auth-cookie.options'
 
 const AUTH_COOKIE_MAX_AGE_MS = 1000 * 60 * 60 * 30
 
-@Controller('api/auth')
+@Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 

@@ -21,7 +21,7 @@ import { Roles } from '../../common/decorators/roles.decorator'
 import { RolesGuard } from '../../common/guards/roles.guard'
 import { Role } from '../../generated/prisma/enums'
 
-@Controller('api/marginalia')
+@Controller('marginalia')
 export class MarginaliaController {
     constructor(private readonly marginaliaService: MarginaliaService) {}
 

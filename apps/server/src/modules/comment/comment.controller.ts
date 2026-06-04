@@ -21,7 +21,7 @@ import { Roles } from '../../common/decorators/roles.decorator'
 import { RolesGuard } from '../../common/guards/roles.guard'
 import { Role } from '../../generated/prisma/enums'
 
-@Controller('api/comment')
+@Controller('comment')
 export class CommentController {
     constructor(private readonly commentService: CommentService) {}
 

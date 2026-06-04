@@ -19,7 +19,7 @@ import { Role } from '../../generated/prisma/enums'
 
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Roles(Role.ADMIN, Role.USER)
-@Controller('api/user')
+@Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
