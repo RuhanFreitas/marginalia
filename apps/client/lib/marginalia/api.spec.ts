@@ -11,19 +11,6 @@ describe('marginalia api', () => {
         vi.unstubAllGlobals()
     })
 
-    it('getAllMarginalias fetches list', async () => {
-        const list = [createMarginalia()]
-        vi.mocked(fetch).mockResolvedValue(
-            new Response(JSON.stringify(list), { status: 200 }),
-        )
-
-        await expect(marginaliaApi.getAllMarginalias()).resolves.toEqual(list)
-        expect(fetch).toHaveBeenCalledWith(
-            `${API_BASE_URL}/marginalia/all`,
-            { credentials: 'include' },
-        )
-    })
-
     it('createMarginalia posts body', async () => {
         const body = {
             title: 'T',

@@ -4,7 +4,7 @@ import { PageError } from '@/components/ui'
 import { SearchBar } from '@/components/search'
 import { SearchProvider } from '@/providers'
 import { getErrorMessage } from '@/lib/api'
-import { getAllMarginalias } from '@/lib/marginalia'
+import { getAllMarginalias } from '@/lib/marginalia/server'
 import { Marginalia } from '@/types/api/marginalia'
 
 export default async function Page() {

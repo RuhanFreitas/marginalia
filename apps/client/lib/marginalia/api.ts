@@ -1,5 +1,4 @@
-﻿import { handleJsonResponse } from '@/lib/api'
-import { getApiBaseUrl } from '@/lib/api'
+﻿import { handleJsonResponse, getApiBaseUrl } from '@/lib/api'
 import type {
     CreateMarginaliaBody,
     Marginalia,
@@ -7,22 +6,6 @@ import type {
 } from '@/types/api/marginalia'
 
 const MARGINALIA_PATH = '/marginalia'
-
-export async function getAllMarginalias(): Promise<Marginalia[]> {
-    const res = await fetch(`${getApiBaseUrl()}${MARGINALIA_PATH}/all`, {
-        credentials: 'include',
-    })
-
-    return handleJsonResponse<Marginalia[]>(res, 'Failed to load entries')
-}
-
-export async function getMarginalia(id: string): Promise<Marginalia> {
-    const res = await fetch(`${getApiBaseUrl()}${MARGINALIA_PATH}/${id}`, {
-        credentials: 'include',
-    })
-
-    return handleJsonResponse<Marginalia>(res, 'Entry not found')
-}
 
 export async function createMarginalia(
     body: CreateMarginaliaBody,

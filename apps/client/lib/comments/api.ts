@@ -1,14 +1,5 @@
-﻿import { handleJsonResponse, parseApiError } from '@/lib/api'
-import { getApiBaseUrl } from '@/lib/api'
-import type { Comment, CreateCommentBody } from '@/types/api/comment'
-
-export async function getComments(slug: string): Promise<Comment[]> {
-    const res = await fetch(`${getApiBaseUrl()}/comment/${slug}/comments`, {
-        credentials: 'include',
-    })
-
-    return handleJsonResponse<Comment[]>(res, 'Failed to load comments')
-}
+﻿import { parseApiError, getApiBaseUrl } from '@/lib/api'
+import type { CreateCommentBody } from '@/types/api/comment'
 
 export async function postComment(body: CreateCommentBody): Promise<void> {
     const res = await fetch(`${getApiBaseUrl()}/comment`, {

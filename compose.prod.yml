@@ -48,7 +48,7 @@ services:
                 NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api}
         restart: unless-stopped
         environment:
-            API_INTERNAL_URL: http://server:3001
+            API_INTERNAL_URL: http://nginx/api
         networks:
             - marginalia
 
