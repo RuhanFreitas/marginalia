@@ -427,7 +427,3 @@ See [`test/README.md`](test/README.md).
 `components/marginalia/markdown-editor.tsx` uses helpers from `lib/marginalia/markdown-editor.ts` (`MARKDOWN_WRAP`, `MARKDOWN_BLOCK`) that match the server’s `markdownToHtml` rules (bold, italic, lists, links, images, blockquotes, etc.), so preview and stored HTML stay consistent.
 
 ---
-
-## License
-
-Private package (`private: true` in `package.json`).
