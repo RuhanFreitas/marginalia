@@ -84,7 +84,3 @@ From the project root:
 | `npm run test` | Runs tests for the server and website |
 
 ---
-
-## License
-
-Private project.
