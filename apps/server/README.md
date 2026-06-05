@@ -457,7 +457,3 @@ Supertest against the full `AppModule`. Requires PostgreSQL, `.env` with `DATABA
 - **Domain errors** — `NotFoundException`, `UnauthorizedException` from Nest HTTP exceptions.
 
 ---
-
-## License
-
-Private package (`UNLICENSED` in `package.json`).
