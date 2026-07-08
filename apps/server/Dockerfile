@@ -52,3 +52,4 @@ EXPOSE 3001
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["node", "dist/src/main.js"]
+
